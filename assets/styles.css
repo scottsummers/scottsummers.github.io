@@ -70,7 +70,6 @@ h2{margin:0;font:700 clamp(1.9rem,4vw,2.6rem)/1.1 var(--display);letter-spacing:
 
 /* ---------- glass cards ---------- */
 .cards{display:grid;gap:1.25rem;list-style:none;margin:0;padding:0}
-.featured{grid-template-columns:repeat(3,1fr)}
 .repos{grid-template-columns:repeat(3,1fr)}
 .repos li{display:flex}
 .glass{position:relative;background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:var(--radius);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 20px 50px -30px rgba(0,0,0,.8)}
@@ -84,13 +83,11 @@ h2{margin:0;font:700 clamp(1.9rem,4vw,2.6rem)/1.1 var(--display);letter-spacing:
 .card:hover .card-art svg{transform:scale(1.08) rotate(-3deg)}
 .art-chess{color:#ffc58f;background:radial-gradient(circle at 30% 20%,rgba(255,138,61,.35),transparent 60%),linear-gradient(135deg,#1b1420,#120f1c)}
 .art-word{color:#9ff0f8;background:radial-gradient(circle at 70% 25%,rgba(56,214,232,.32),transparent 60%),linear-gradient(135deg,#0e1a24,#0d1220)}
-.art-news{color:#c2c8ff;background:radial-gradient(circle at 40% 80%,rgba(124,140,255,.38),transparent 60%),linear-gradient(135deg,#131536,#0d0f22)}
 .card-body{display:flex;flex-direction:column;gap:.55rem;padding:1.4rem 1.4rem 1.5rem;flex:1}
 .card h3{margin:0;font:600 1.2rem var(--display);letter-spacing:-.02em}
 .card p{margin:0;color:var(--muted);font-size:.95rem}
 .tag{align-self:flex-start;padding:.18rem .6rem;border-radius:999px;font:500 .72rem var(--mono);letter-spacing:.06em;text-transform:uppercase}
 .tag.live{color:#8ff5c3;background:rgba(64,220,150,.12);border:1px solid rgba(64,220,150,.3)}
-.tag.wip{color:#ffd29e;background:rgba(255,160,70,.12);border:1px solid rgba(255,160,70,.3)}
 .go{margin-top:auto;padding-top:.6rem;font-weight:600;font-size:.92rem;color:var(--text)}
 .go span{display:inline-block;transition:transform .25s}
 .card:hover .go span{transform:translateX(4px)}
@@ -120,7 +117,7 @@ h2{margin:0;font:700 clamp(1.9rem,4vw,2.6rem)/1.1 var(--display);letter-spacing:
 
 /* ---------- responsive ---------- */
 @media (max-width:960px){
-  .featured,.repos{grid-template-columns:repeat(2,1fr)}
+  .repos{grid-template-columns:repeat(2,1fr)}
   .focus{grid-template-columns:repeat(2,1fr)}
   .focus-group:nth-child(3){border-left:0}
   .focus-group:nth-child(n+3){border-top:1px solid var(--line)}
@@ -129,7 +126,7 @@ h2{margin:0;font:700 clamp(1.9rem,4vw,2.6rem)/1.1 var(--display);letter-spacing:
   .nav{padding:.8rem 1rem}
   .nav ul li:not(:last-child){display:none}
   main{padding:0 1rem}
-  .featured,.repos,.focus{grid-template-columns:1fr}
+  .repos,.focus{grid-template-columns:1fr}
   .focus-group+.focus-group{border-left:0;border-top:1px solid var(--line)}
   .stats{grid-template-columns:1.5fr 1fr 1fr;gap:.8rem}
   .stats dd{white-space:nowrap}
@@ -164,15 +161,9 @@ h2{margin:0;font:700 clamp(1.9rem,4vw,2.6rem)/1.1 var(--display);letter-spacing:
 .game .card-body{padding:1.6rem 1.7rem 1.8rem;gap:.7rem}
 .game .card-body p{margin-bottom:.8rem}
 .game:hover{transform:translateY(-4px)}
-.featured .wide{flex-direction:row}
-.featured .wide .card-art{width:260px;height:auto;min-height:180px;border-bottom:0;border-right:1px solid var(--line)}
-.featured{grid-template-columns:1fr}
-.sub-h{margin:2.6rem 0 1.1rem;font:500 .8rem var(--mono);text-transform:uppercase;letter-spacing:.14em;color:var(--faint);scroll-margin-top:5rem}
 @media (max-width:760px){
   .games{grid-template-columns:1fr}
   .game .game-art{height:170px}
   .game .game-art svg{width:110px;height:110px}
-  .featured .wide{flex-direction:column}
-  .featured .wide .card-art{width:auto;min-height:0;height:120px;border-right:0;border-bottom:1px solid var(--line)}
-  .btn.play{align-self:stretch}
+      .btn.play{align-self:stretch}
 }
