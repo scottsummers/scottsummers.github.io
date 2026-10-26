@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Grid War · Scott Summers</title>
-<meta name="description" content="Grid War: Blue Hat vs. Red Berry. Stamp squares through open doorways in a maze, seal off pockets and claim the most territory. 1 player vs. the computer or 2 players on one device. Works offline, no sign-in.">
+<meta name="description" content="Grid War: classic dots and boxes, Red vs Blue. Take turns drawing lines between dots, close a box to claim it and go again. Most boxes wins. 1 player vs. the computer or 2 players on one device. Works offline, no sign-in.">
 <meta name="theme-color" content="#07080f">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23101324'/%3E%3Crect x='5' y='5' width='10' height='10' rx='2' fill='%2338bdf8'/%3E%3Crect x='17' y='17' width='10' height='10' rx='2' fill='%23fb7185'/%3E%3Cpath d='M16 4v10M4 16h10M18 16h10M16 18v10' stroke='%23eef0f7' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23101324'/%3E%3Crect x='7' y='7' width='9' height='9' fill='%23fb7185' opacity='.5'/%3E%3Cpath d='M7 7h9v9M16 16h9M7 7v9' stroke='%23fb7185' stroke-width='2.4' stroke-linecap='round'/%3E%3Cpath d='M25 16v9h-9' stroke='%2338bdf8' stroke-width='2.4' stroke-linecap='round'/%3E%3Cg fill='%23eef0f7'%3E%3Ccircle cx='7' cy='7' r='2'/%3E%3Ccircle cx='16' cy='7' r='2'/%3E%3Ccircle cx='25' cy='7' r='2'/%3E%3Ccircle cx='7' cy='16' r='2'/%3E%3Ccircle cx='16' cy='16' r='2'/%3E%3Ccircle cx='25' cy='16' r='2'/%3E%3Ccircle cx='7' cy='25' r='2'/%3E%3Ccircle cx='16' cy='25' r='2'/%3E%3Ccircle cx='25' cy='25' r='2'/%3E%3C/g%3E%3C/svg%3E">
 <style>
-:root{--acc:#38bdf8;--acc2:#fb7185;--blue:#38bdf8;--red:#fb7185}
+:root{--acc:#fb7185;--acc2:#38bdf8;--blue:#38bdf8;--red:#fb7185}
 :root{--bg:#07080f;--text:#eef0f7;--muted:#a9b0c6;--faint:#7d859e;--line:rgba(255,255,255,.10);--line-hi:rgba(255,255,255,.22);--glass:rgba(255,255,255,.05);--font:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;--mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;--acc-glow:color-mix(in srgb,var(--acc) 26%,transparent);--acc2-glow:color-mix(in srgb,var(--acc2) 22%,transparent)}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -62,31 +62,34 @@ dialog .btn{width:100%}
 
 .layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:1.1rem;align-items:start}
 .stage{position:relative;padding:1rem;display:flex;flex-direction:column;align-items:center}
-.war-bar{width:100%;max-width:560px;display:grid;grid-template-columns:1fr auto 1fr;gap:.55rem;align-items:center;margin-bottom:.6rem}
-.team{display:flex;align-items:center;gap:.55rem;padding:.45rem .7rem;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.035);transition:border-color .2s,box-shadow .2s,background .2s;min-width:0}
-.team.red{flex-direction:row-reverse;text-align:right}
-.team.on.blue{border-color:rgba(56,189,248,.8);background:rgba(56,189,248,.12);box-shadow:0 0 24px -8px rgba(56,189,248,.7)}
-.team.on.red{border-color:rgba(251,113,133,.8);background:rgba(251,113,133,.12);box-shadow:0 0 24px -8px rgba(251,113,133,.7)}
-.team .ico{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:1.3rem;flex:none}
-.blue .ico{background:rgba(56,189,248,.2);border:1px solid rgba(56,189,248,.45)}
-.red .ico{background:rgba(251,113,133,.2);border:1px solid rgba(251,113,133,.45)}
-.team .meta{min-width:0}
-.team .nm{display:block;font:700 .68rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.team .sc{font:800 1.45rem/1.1 var(--font);font-variant-numeric:tabular-nums}
-.blue .sc{color:var(--blue)}.red .sc{color:var(--red)}
-.pill{display:flex;flex-direction:column;align-items:center;padding:.35rem .7rem;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.3);min-width:104px;text-align:center}
-.pill b{font:750 .8rem var(--font);white-space:nowrap}
-.pill small{font:600 .66rem var(--mono);color:var(--faint);white-space:nowrap}
+.war-bar{width:100%;max-width:560px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:.55rem;align-items:center;margin-bottom:.6rem}
+.team{display:flex;align-items:center;gap:.6rem;padding:.45rem .7rem;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.035);transition:border-color .2s,box-shadow .2s,background .2s;min-width:0}
+.team.p2{flex-direction:row-reverse;text-align:right}
+.team.on.p1{border-color:rgba(251,113,133,.85);background:rgba(251,113,133,.13);box-shadow:0 0 24px -8px rgba(251,113,133,.75)}
+.team.on.p2{border-color:rgba(56,189,248,.85);background:rgba(56,189,248,.13);box-shadow:0 0 24px -8px rgba(56,189,248,.75)}
+.team .sw{flex:none;min-width:42px;height:42px;padding:0 .3rem;border-radius:11px;display:grid;place-items:center;font:800 1.35rem/1 var(--font);font-variant-numeric:tabular-nums;color:#0a0b14}
+.p1 .sw{background:linear-gradient(140deg,#fda4af,#fb7185)}
+.p2 .sw{background:linear-gradient(140deg,#7dd3fc,#38bdf8)}
+.team .meta{min-width:0;line-height:1.15}
+.team .nm{display:block;font:800 1rem var(--font);overflow-wrap:break-word}
+.p1 .nm{color:var(--red)}.p2 .nm{color:var(--blue)}
+.team .role{display:block;font-size:.74rem;color:var(--muted);font-weight:600;overflow-wrap:normal}
+.pill{display:flex;flex-direction:column;align-items:center;padding:.35rem .7rem;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.3);min-width:108px;text-align:center}
+.pill b{font:750 .86rem var(--font);white-space:nowrap}
+.pill small{font:600 .68rem var(--mono);color:var(--faint);white-space:nowrap}
+.pill.again small{color:#ffd23f}
+.pill.again{border-color:rgba(255,210,63,.55);animation:pop .4s}
+@keyframes pop{40%{transform:scale(1.08)}}
 .terr{width:100%;max-width:560px;height:8px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;display:flex;margin-bottom:.75rem}
 .terr i{display:block;height:100%;transition:width .3s ease}
-.terr .tb{background:linear-gradient(90deg,#0284c7,#38bdf8)}
-.terr .tr{margin-left:auto;background:linear-gradient(90deg,#fb7185,#e11d48)}
+.terr .t1{background:linear-gradient(90deg,#e11d48,#fb7185)}
+.terr .t2{margin-left:auto;background:linear-gradient(90deg,#38bdf8,#0284c7)}
 .cv-wrap{position:relative;width:min(100%,540px,calc(100vh - 250px));min-width:260px;aspect-ratio:1}
 .cv-wrap.shake{animation:shake .35s}
 canvas#board{display:block;width:100%;height:100%;border-radius:18px;border:1px solid var(--line-hi);background:#0c1020;box-shadow:inset 0 2px 24px rgba(0,0,0,.6),0 20px 50px -30px rgba(0,0,0,.9);touch-action:manipulation;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .under{width:100%;max-width:560px;display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.75rem;flex-wrap:wrap}
 .under .btn{padding:.5rem .85rem;font-size:.86rem}
-.left{font:600 .78rem var(--mono);color:var(--faint);margin-top:.55rem}
+.left{font:600 .78rem var(--mono);color:var(--faint);margin-top:.55rem;text-align:center}
 .side{display:flex;flex-direction:column;gap:1rem}
 .panel{padding:1rem}
 .panel h3{margin:0 0 .6rem;font:700 .7rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
@@ -95,8 +98,8 @@ canvas#board{display:block;width:100%;height:100%;border-radius:18px;border:1px 
 .opt label{font-size:.86rem;color:var(--muted);font-weight:600}
 .opt .seg button{padding:.38rem .65rem;font-size:.82rem}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:0;padding:0}
-.stat{margin:0;padding:.5rem .7rem;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.035)}
-.stat dt{font:600 .62rem var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.stat{margin:0;padding:.5rem .7rem;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.035);min-width:0}
+.stat dt{font:600 .62rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
 .stat dd{margin:.1rem 0 0;font:750 1.2rem/1.2 var(--font);font-variant-numeric:tabular-nums}
 .stat.hi dd{color:var(--acc)}
 .small{font-size:.82rem;color:var(--muted);margin:.6rem 0 0;line-height:1.45}
@@ -112,21 +115,23 @@ canvas#board{display:block;width:100%;height:100%;border-radius:18px;border:1px 
   .wrap{padding:.3rem .9rem 2rem}
   .btn{padding:.55rem .8rem;font-size:.88rem}
   .stage{padding:.6rem}.panel{padding:.75rem}.cv-wrap{min-width:0}
-  .team{padding:.4rem .5rem;gap:.4rem}.team .ico{width:30px;height:30px;font-size:1.05rem}.team .sc{font-size:1.2rem}
-  .pill{min-width:0;padding:.3rem .5rem}
-  .team .nm{letter-spacing:.02em;font-size:.62rem}
+  .war-bar{gap:.4rem}
+  .team{padding:.4rem .45rem;gap:.4rem}.team .sw{min-width:34px;height:34px;font-size:1.1rem;border-radius:9px}
+  .team .nm{font-size:.9rem}.team .role{font-size:.68rem}
+  .pill{min-width:0;max-width:6.4rem;padding:.3rem .45rem}.pill b{font-size:.8rem;white-space:normal;line-height:1.15}.pill small{white-space:normal}
   .opt .seg button{padding:.36rem .55rem}
 }
+@media (max-width:380px){.war-bar{gap:.3rem}.team{padding:.35rem .35rem;gap:.3rem}.team .sw{min-width:30px;height:30px;font-size:1rem}.team .role{font-size:.64rem}.pill{padding:.3rem .35rem}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <header class="top">
   <a class="home" href="/" aria-label="Back to scottsummers.github.io">← Home</a>
-  <h1 class="title"><i aria-hidden="true"></i>Grid War <span class="sub">🧢 vs 🍓</span></h1>
+  <h1 class="title"><i aria-hidden="true"></i>Grid War <span class="sub">Red vs Blue</span></h1>
   <div class="actions">
     <button class="btn" id="helpBtn" type="button">How to play</button>
-    <button class="btn" id="newBtn" type="button">New map</button>
+    <button class="btn" id="newBtn" type="button">New game</button>
   </div>
 </header>
 
@@ -134,31 +139,29 @@ canvas#board{display:block;width:100%;height:100%;border-radius:18px;border:1px 
   <div class="layout">
     <section class="stage glass" aria-label="Grid War">
       <div class="war-bar">
-        <div class="team blue" id="tBlue"><div class="ico" aria-hidden="true">🧢</div><div class="meta"><span class="nm" id="nBlue">Blue Hat</span><div class="sc" id="sBlue">1</div></div></div>
-        <div class="pill" aria-live="polite"><b id="turnTxt">🧢 Blue's turn</b><small id="stepTxt">1 stamp</small></div>
-        <div class="team red" id="tRed"><div class="ico" aria-hidden="true">🍓</div><div class="meta"><span class="nm" id="nRed">Red Berry</span><div class="sc" id="sRed">1</div></div></div>
+        <div class="team p1" id="t1"><div class="sw" id="s1">0</div><div class="meta"><span class="nm">Red</span><span class="role" id="role1">You</span></div></div>
+        <div class="pill" id="pill" aria-live="polite"><b id="turnTxt">Red's turn</b><small id="stepTxt">draw a line</small></div>
+        <div class="team p2" id="t2"><div class="sw" id="s2">0</div><div class="meta"><span class="nm">Blue</span><span class="role" id="role2">Computer</span></div></div>
       </div>
-      <div class="terr" aria-hidden="true"><i class="tb" id="barB" style="width:4%"></i><i class="tr" id="barR" style="width:4%"></i></div>
+      <div class="terr" aria-hidden="true"><i class="t1" id="bar1" style="width:0%"></i><i class="t2" id="bar2" style="width:0%"></i></div>
       <div class="cv-wrap" id="cvwrap">
-        <canvas id="board" aria-label="Grid War maze board. Use arrow keys to move the cursor and Enter to stamp." role="img" tabindex="0"></canvas>
+        <canvas id="board" aria-label="Grid War board: a grid of dots. Tap near a gap between two dots to draw a line. Keyboard: arrow keys move, Enter draws." role="img" tabindex="0"></canvas>
         <div class="overlay" id="ov" hidden>
           <div>
             <div id="ovBadge"></div>
-            <h2 id="ovTitle">Blue Hat wins!</h2>
+            <h2 id="ovTitle">Red wins!</h2>
             <div class="big" id="ovScore">13 – 12</div>
             <p class="muted" id="ovText" style="max-width:22rem;margin:.4rem auto 1rem"></p>
             <div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap">
-              <button class="btn" id="sameBtn" type="button">Same map, swap starter</button>
-              <button class="btn primary" id="againBtn" type="button">New map →</button>
+              <button class="btn primary" id="againBtn" type="button">Play again →</button>
+              <button class="btn" id="peekBtn" type="button">Look at the board</button>
             </div>
-            <button class="btn" id="peekBtn" type="button" style="margin-top:.6rem;font-size:.8rem;padding:.35rem .7rem">Look at the board</button>
           </div>
         </div>
       </div>
-      <div class="left" id="leftTxt">23 empty squares</div>
+      <div class="left" id="leftTxt"></div>
       <div class="under">
         <button class="btn" id="undoBtn" type="button">↶ Undo</button>
-        <button class="btn" id="hintBtn" type="button">💡 Hint</button>
         <button class="btn" id="resultBtn" type="button" hidden>🏁 Result</button>
       </div>
     </section>
@@ -166,35 +169,34 @@ canvas#board{display:block;width:100%;height:100%;border-radius:18px;border:1px 
     <aside class="side">
       <section class="panel glass p-opts">
         <h3>Setup</h3>
-        <div class="opt"><label>Players</label><div class="seg" role="group" aria-label="Players" id="vsSeg"><button type="button" data-v="ai">1P vs AI</button><button type="button" data-v="2p">2 players</button></div></div>
-        <div class="opt" id="aiRow"><label>AI</label><div class="seg" role="group" aria-label="AI level" id="aiSeg"><button type="button" data-v="easy">Easy</button><button type="button" data-v="normal">Normal</button><button type="button" data-v="clever">Clever</button></div></div>
-        <div class="opt"><label>Board</label><div class="seg" role="group" aria-label="Board size" id="sizeSeg"><button type="button" data-v="5">5×5</button><button type="button" data-v="7">7×7</button></div></div>
-        <div class="opt"><label>Stamps / turn</label><div class="seg" role="group" aria-label="Stamps per turn" id="perSeg"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button></div></div>
-        <p class="small">Changing a setting starts a new game. Mazes are mirror-symmetric, and the first player swaps every game, so it's fair.</p>
+        <div class="opt"><label>Players</label><div class="seg" role="group" aria-label="Players" id="vsSeg"><button type="button" data-v="ai">1P vs computer</button><button type="button" data-v="2p">2 players</button></div></div>
+        <div class="opt" id="aiRow"><label>Computer</label><div class="seg" role="group" aria-label="Computer level" id="aiSeg"><button type="button" data-v="easy">Easy</button><button type="button" data-v="normal">Normal</button><button type="button" data-v="clever">Clever</button></div></div>
+        <div class="opt"><label>Boxes</label><div class="seg" role="group" aria-label="Board size" id="sizeSeg"><button type="button" data-v="3">3×3</button><button type="button" data-v="4">4×4</button><button type="button" data-v="5">5×5</button></div></div>
+        <p class="small">Changing a setting starts a new game. Who goes first swaps every game.</p>
       </section>
       <section class="panel glass p-stats">
-        <h3 id="recTitle">Record vs AI · Normal</h3>
+        <h3 id="recTitle">Record vs computer · Normal</h3>
         <dl class="stats">
           <div class="stat hi"><dt id="r1t">Wins</dt><dd id="r1">0</dd></div>
           <div class="stat"><dt id="r2t">Losses</dt><dd id="r2">0</dd></div>
-          <div class="stat"><dt id="r3t">Streak</dt><dd id="r3">0</dd></div>
+          <div class="stat"><dt id="r3t">Ties</dt><dd id="r3">0</dd></div>
         </dl>
-        <p class="small"><b style="color:var(--text)">Tip:</b> close off a pocket of the maze so only you can reach it, and every square inside becomes yours.</p>
+        <p class="small"><b style="color:var(--text)">Tip:</b> avoid drawing the third side of a box. That hands your opponent the box, and often a whole chain of them.</p>
       </section>
     </aside>
   </div>
-  <p class="hint">Tap or click a glowing square to stamp it · Keys: <span class="kbd">←</span><span class="kbd">↑</span><span class="kbd">↓</span><span class="kbd">→</span> move · <span class="kbd">Enter</span>/<span class="kbd">Space</span> stamp · <span class="kbd">U</span> undo · <span class="kbd">H</span> hint · <span class="kbd">N</span> new map</p>
+  <p class="hint">Tap or click near a gap between two dots to draw a line · Keys: <span class="kbd">←</span><span class="kbd">↑</span><span class="kbd">↓</span><span class="kbd">→</span> move · <span class="kbd">Enter</span>/<span class="kbd">Space</span> draw · <span class="kbd">U</span> undo · <span class="kbd">N</span> new game</p>
 </main>
 
 <dialog id="help" aria-labelledby="helpTitle">
   <h2 id="helpTitle">How to play <span>Grid War</span></h2>
   <ul>
-    <li><b>🧢 Blue Hat</b> starts in the top-left corner and <b>🍓 Red Berry</b> in the bottom-right. Each owns one square.</li>
-    <li>The board is a maze. Thick lines are <b>walls</b>; gaps are <b>open doorways</b>.</li>
-    <li>On your turn, <b>stamp an empty square</b> that is next to one of yours <b>through an open doorway</b>. You can't stamp through a wall. Squares you can stamp glow.</li>
-    <li><b>Seal a pocket:</b> if a group of empty squares can only be reached by one player, that player claims all of it at once. Block corridors to steal whole rooms!</li>
-    <li>The game ends when every square is taken. <b>Most squares wins.</b> The board has an odd number of squares, so there are no ties.</li>
-    <li>Play the computer (Easy, Normal or Clever) or a friend on the same device. With <b>2 stamps per turn</b>, the very first turn is just 1 stamp to keep it fair.</li>
+    <li>The board starts as a <b>grid of dots</b>. <b>Red</b> and <b>Blue</b> take turns.</li>
+    <li>On your turn, <b>draw one line</b> between two dots that sit next to each other, across or down.</li>
+    <li>Draw the <b>fourth side of a box</b> and it's yours: it fills with your colour. One line can close <b>two boxes</b> at once.</li>
+    <li>Closing a box means you <b>go again</b>. Keep going as long as you keep closing boxes. If your line closes nothing, the turn passes.</li>
+    <li>When every line is drawn, <b>most boxes wins</b>. On a 4×4 board an 8–8 tie is possible.</li>
+    <li>Play the computer (Easy, Normal or Clever) or a friend on the same device. Made a slip? <b>Undo</b> it.</li>
   </ul>
   <button class="btn primary" data-close type="button">Got it, let's play</button>
 </dialog>
@@ -210,185 +212,186 @@ function closeHelp(){var d=$('#help');if(typeof d.close==='function')d.close();e
 function helpOpen(){var d=$('#help');return d&&d.open}
 function setupHelp(key){$('#helpBtn').addEventListener('click',openHelp);$('#help [data-close]').addEventListener('click',closeHelp);$('#help').addEventListener('click',function(e){if(e.target===this)closeHelp()});if(!store.get(key+':seenHelp',false)){store.set(key+':seenHelp',true);openHelp()}}
 var _tt;function toast(m,ms){var t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('show')},ms||1800)}
-function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function burst(colors){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var c=$('#fx'),x=c.getContext('2d'),W=c.width=innerWidth,H=c.height=innerHeight,p=[];for(var i=0;i<140;i++)p.push({x:W/2,y:H*0.45,vx:(Math.random()-.5)*14,vy:Math.random()*-13-3,s:Math.random()*7+4,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:colors[i%colors.length],l:1});var f=0;(function step(){x.clearRect(0,0,W,H);var alive=false;p.forEach(function(q){q.vy+=.38;q.vx*=.99;q.x+=q.vx;q.y+=q.vy;q.r+=q.vr;q.l-=.008;if(q.l>0&&q.y<H+20){alive=true;x.save();x.globalAlpha=Math.max(q.l,0);x.translate(q.x,q.y);x.rotate(q.r);x.fillStyle=q.c;x.fillRect(-q.s/2,-q.s/3,q.s,q.s*.66);x.restore()}});if(alive&&++f<400)requestAnimationFrame(step);else x.clearRect(0,0,W,H)})()}
 
 (function(){
-var BLUE=1,RED=2,NAME={1:'Blue Hat',2:'Red Berry'},EMO={1:'🧢',2:'🍓'},COL={1:'#38bdf8',2:'#fb7185'},RGB={1:'56,189,248',2:'251,113,133'};
-var opts=store.get('gw:opts',{vs:'ai',ai:'normal',size:5,per:1});
+var P1=1,P2=2,NAME={1:'Red',2:'Blue'},COL={1:'#fb7185',2:'#38bdf8'},RGB={1:'251,113,133',2:'56,189,248'};
+var opts=store.get('gw2:opts',{vs:'ai',ai:'normal',size:5});
 if(['ai','2p'].indexOf(opts.vs)<0)opts.vs='ai';if(['easy','normal','clever'].indexOf(opts.ai)<0)opts.ai='normal';
-opts.size=+opts.size===7?7:5;opts.per=+opts.per===2?2:1;
-var REC=store.get('gw:rec',{});
-var nextFirst=store.get('gw:first',BLUE)===RED?RED:BLUE;
-var G=null,hist=[],aiTimer=null,cursor=-1,hover=-1,hintCell=-1,peek=false,flash=[],flashT=0;
+opts.size=[3,4,5].indexOf(+opts.size)<0?5:+opts.size;
+var REC=store.get('gw2:rec',{});
+var nextFirst=store.get('gw2:first',P1)===P2?P2:P1;
+var G=null,geo=null,hist=[],aiTimer=null,hover=-1,peek=false,flashT=0,cur=null;
 
-// ---------- maze ----------
-// Cells are numbered r*N+c. adj[i] = cells reachable from i through an open doorway.
-// Mazes are built with Kruskal's algorithm over mirror pairs of walls (180° rotation),
-// so the maze is always fully connected and both starting corners see the same maze.
-function makeMaze(N,seed){
-  var rnd=mulberry32(seed),T=N*N,edges=[],groups={},keys=[],i,r,c;
-  function ek(a,b){return a<b?a*T+b:b*T+a}
-  for(r=0;r<N;r++)for(c=0;c<N;c++){i=r*N+c;if(c<N-1)edges.push([i,i+1]);if(r<N-1)edges.push([i,i+N])}
-  edges.forEach(function(e){var k1=ek(e[0],e[1]),m=[T-1-e[0],T-1-e[1]],k2=ek(m[0],m[1]),g=Math.min(k1,k2);
-    if(!groups[g]){groups[g]=[];keys.push(g)}if(groups[g].every(function(x){return ek(x[0],x[1])!==k1}))groups[g].push(e)});
-  for(i=keys.length-1;i>0;i--){var j=Math.floor(rnd()*(i+1)),t=keys[i];keys[i]=keys[j];keys[j]=t}
-  var par=[];for(i=0;i<T;i++)par[i]=i;
-  function find(x){while(par[x]!==x){par[x]=par[par[x]];x=par[x]}return x}
-  var open={},closed=[];
-  keys.forEach(function(k){var g=groups[k],merge=g.some(function(e){return find(e[0])!==find(e[1])});
-    if(merge)g.forEach(function(e){open[ek(e[0],e[1])]=1;par[find(e[0])]=find(e[1])});else closed.push(g)});
-  var loopP=N===5?0.22:0.18;
-  closed.forEach(function(g){if(rnd()<loopP)g.forEach(function(e){open[ek(e[0],e[1])]=1})});
-  var adj=[];for(i=0;i<T;i++)adj[i]=[];
-  edges.forEach(function(e){if(open[ek(e[0],e[1])]){adj[e[0]].push(e[1]);adj[e[1]].push(e[0])}});
-  return {adj:adj,isOpen:function(a,b){return !!open[ek(a,b)]}};
-}
+// ---------- board geometry ----------
+// N boxes per side, (N+1)x(N+1) dots. Horizontal line (r,c) joins dot(r,c)-dot(r,c+1): id r*N+c.
+// Vertical line (r,c) joins dot(r,c)-dot(r+1,c): id HN + r*(N+1)+c.
+function makeGeo(N){var HN=(N+1)*N,L=HN+N*(N+1),B=N*N,lb=[],bl=[],r,c,i;
+  for(i=0;i<L;i++)lb[i]=[];
+  for(r=0;r<N;r++)for(c=0;c<N;c++){var b=r*N+c,s=[r*N+c,(r+1)*N+c,HN+r*(N+1)+c,HN+r*(N+1)+c+1];bl[b]=s;for(i=0;i<4;i++)lb[s[i]].push(b)}
+  return {N:N,HN:HN,L:L,B:B,lb:lb,bl:bl}}
+function lineDots(l){var N=geo.N;if(l<geo.HN){var r=Math.floor(l/N),c=l%N;return [r,c,r,c+1]}var k=l-geo.HN,r2=Math.floor(k/(N+1)),c2=k%(N+1);return [r2,c2,r2+1,c2]}
 
-// ---------- rules (pure, shared by the game and the AI) ----------
-function legalFor(own,adj,p){var out=[];for(var i=0;i<own.length;i++){if(own[i])continue;var a=adj[i];for(var k=0;k<a.length;k++)if(own[a[k]]===p){out.push(i);break}}return out}
-// Any group of empty squares that only one player can reach is claimed by that player.
-function sealPockets(own,adj,mark){var T=own.length,seen=new Uint8Array(T),claimed=[];
-  for(var s=0;s<T;s++){if(own[s]||seen[s])continue;var comp=[s],mask=0;seen[s]=1;
-    for(var q=0;q<comp.length;q++){var a=adj[comp[q]];for(var k=0;k<a.length;k++){var n=a[k];if(own[n])mask|=own[n];else if(!seen[n]){seen[n]=1;comp.push(n)}}}
-    if(mask===1||mask===2){for(var m=0;m<comp.length;m++){own[comp[m]]=mask;if(mark)mark[comp[m]]=1;claimed.push(comp[m])}}}
-  return claimed}
-function countOwn(own){var c=[0,0,0];for(var i=0;i<own.length;i++)c[own[i]]++;return c}
-// state for search: {own,turn,left}
-function simPlay(s,i,per){var own=s.own.slice();own[i]=s.turn;sealPockets(own,G.adj);var left=s.left-1,turn=s.turn;if(left<=0){turn=3-turn;left=per}return {own:own,turn:turn,left:left}}
-function full(own){for(var i=0;i<own.length;i++)if(!own[i])return false;return true}
-// Evaluation: owned squares plus empty squares that each side can reach first (Voronoi).
-function evaluate(own,adj,p){var T=own.length,d1=new Int16Array(T).fill(999),d2=new Int16Array(T).fill(999),q1=[],q2=[],i;
-  for(i=0;i<T;i++){if(own[i]===1){d1[i]=0;q1.push(i)}else if(own[i]===2){d2[i]=0;q2.push(i)}}
-  function bfs(q,d){for(var h=0;h<q.length;h++){var a=adj[q[h]];for(var k=0;k<a.length;k++){var n=a[k];if(!own[n]&&d[n]>d[q[h]]+1){d[n]=d[q[h]]+1;q.push(n)}}}}
-  bfs(q1,d1);bfs(q2,d2);var sc=0;
-  for(i=0;i<T;i++){if(own[i]===1)sc+=1;else if(own[i]===2)sc-=1;else if(d1[i]<d2[i])sc+=.9;else if(d2[i]<d1[i])sc-=.9}
-  return p===1?sc:-sc}
-function search(s,depth,me,alpha,beta,per){
-  if(full(s.own)){var c=countOwn(s.own),d=me===1?c[1]-c[2]:c[2]-c[1];return d>0?1000+d:-1000+d}
-  if(depth===0)return evaluate(s.own,G.adj,me);
-  var moves=legalFor(s.own,G.adj,s.turn);if(!moves.length)return evaluate(s.own,G.adj,me);
-  var maxing=s.turn===me,best=maxing?-1e9:1e9;
-  for(var k=0;k<moves.length;k++){var v=search(simPlay(s,moves[k],per),depth-1,me,alpha,beta,per);
-    if(maxing){if(v>best)best=v;if(best>alpha)alpha=best}else{if(v<best)best=v;if(best<beta)beta=best}
-    if(beta<=alpha)break}
-  return best}
-function chooseMove(level){var s={own:G.own.slice(),turn:G.turn,left:G.left},me=G.turn,moves=legalFor(s.own,G.adj,me);
-  if(!moves.length)return -1;
-  if(level==='easy'&&Math.random()<0.55)return moves[Math.floor(Math.random()*moves.length)];
-  var depth=level==='clever'?(G.N===5?5:3):1,best=-1e9,pick=[];
-  moves.forEach(function(m){var v=search(simPlay(s,m,G.per),depth-1,me,-1e9,1e9,G.per)+Math.random()*0.01;if(v>best){best=v;pick=[m]}});
-  return pick[0]}
+// ---------- rules (pure; d = array of drawn flags/owners per line) ----------
+function sidesLeft(d,b){var s=geo.bl[b],n=0;for(var k=0;k<4;k++)if(!d[s[k]])n++;return n}
+function completes(d,l){var out=[],a=geo.lb[l];for(var k=0;k<a.length;k++)if(sidesLeft(d,a[k])===1)out.push(a[k]);return out}
+function undrawn(d){var o=[];for(var l=0;l<geo.L;l++)if(!d[l])o.push(l);return o}
+function isSafe(d,l){if(completes(d,l).length)return false;var a=geo.lb[l];for(var k=0;k<a.length;k++)if(sidesLeft(d,a[k])===2)return false;return true}
+// boxes the opponent can grab (greedily) right after we draw l
+function giveaway(d,l){var e=d.slice();e[l]=1;var n=0,found=true;while(found){found=false;var u=undrawn(e);for(var k=0;k<u.length;k++){var g=completes(e,u[k]).length;if(g){e[u[k]]=1;n+=g;found=true;break}}}return n}
+function pickRand(a){return a[Math.floor(Math.random()*a.length)]}
+
+// ---------- computer players ----------
+function chooseMove(level){var d=G.drawn,u=undrawn(d);if(!u.length)return -1;
+  var caps=u.filter(function(l){return completes(d,l).length>0}),safe=u.filter(function(l){return isSafe(d,l)});
+  if(level==='easy'){if(caps.length&&Math.random()<0.65)return pickRand(caps);if(safe.length&&Math.random()<0.5)return pickRand(safe);return pickRand(u)}
+  if(level==='clever'){var ex=solveBest(d,700000);if(ex!=null)return ex;var dd=chainEnd(d);if(dd)return cleverCapture(d,caps,dd)}
+  if(caps.length){var two=caps.filter(function(l){return completes(d,l).length===2});return pickRand(two.length?two:caps)}
+  if(safe.length)return pickRand(safe);
+  return minGiveaway(d,u)}
+function minGiveaway(d,u){var best=1e9,pick=[];u.forEach(function(l){var g=giveaway(d,l);if(g<best){best=g;pick=[l]}else if(g===best)pick.push(l)});return pickRand(pick)}
+// Detects the last two boxes of a chain being captured: box B (3 sides) whose open side l leads into box C, whose
+// only other open side m does not continue the chain. Returns {l,m} or null.
+function chainEnd(d){for(var b=0;b<geo.B;b++){if(sidesLeft(d,b)!==1)continue;var l=geo.bl[b].filter(function(x){return !d[x]})[0],o=geo.lb[l].filter(function(x){return x!==b});
+    if(!o.length)continue;var C=o[0];if(sidesLeft(d,C)!==2)continue;var m=geo.bl[C].filter(function(x){return !d[x]&&x!==l})[0],D=geo.lb[m].filter(function(x){return x!==C})[0];
+    if(D!=null&&sidesLeft(d,D)===2)continue;return {l:l,m:m}}return null}
+// Clever capture policy when the solver is too slow: take free boxes first; at the end of a chain, decline the last two
+// boxes (a "double-dealing" move) if what is left is long chains, so we keep control.
+function cleverCapture(d,caps,dd){var other=caps.filter(function(l){return l!==dd.l});if(other.length)return pickRand(other);
+  var e=d.slice();e[dd.l]=1;e[dd.m]=1;var u=undrawn(e);if(!u.length||u.some(function(l){return isSafe(e,l)}))return dd.l;
+  var g=1e9;u.forEach(function(l){var x=giveaway(e,l);if(x<g)g=x});return g>=3?dd.m:dd.l}
+// Exact endgame solver: negamax over the undrawn lines with memo. Returns the best line, or null if over budget.
+function solveBest(d,budget){var u=undrawn(d),R=u.length;if(R>30||!R)return null;var idx={},i;for(i=0;i<R;i++)idx[u[i]]=i;
+  var bm=[],lbR=[];for(i=0;i<R;i++)lbR[i]=[];
+  for(var b=0;b<geo.B;b++){var m=0;geo.bl[b].forEach(function(l){if(!d[l])m|=1<<idx[l]});if(m){var bi=bm.length;bm.push(m);geo.bl[b].forEach(function(l){if(!d[l])lbR[idx[l]].push(bi)})}}
+  function bit(x){return 31-Math.clz32(x)}
+  function other(i,bi){var a=lbR[i];for(var k=0;k<a.length;k++)if(a[k]!==bi)return a[k];return -1}
+  function single(x){return x&&!(x&(x-1))}
+  function moves(mask){for(var bi=0;bi<bm.length;bi++){var m=bm[bi]&mask;if(single(m)){var i=bit(m),C=other(i,bi);if(C<0)return [i];
+        var mc=bm[C]&mask&~m;if(!single(mc))return [i];var j=bit(mc),D=other(j,C);if(D>=0&&single(bm[D]&mask&~mc))return [i];return [i,j]}}
+    var out=[];for(var k=0;k<R;k++)if(mask&(1<<k))out.push(k);return out}
+  var memo=new Map(),nodes=0;
+  function gain(i,mask){var bt=1<<i,k=0,a=lbR[i];for(var q=0;q<a.length;q++)if((bm[a[q]]&mask)===bt)k++;return k}
+  function solve(mask){if(!mask)return 0;var v=memo.get(mask);if(v!==undefined)return v;if(++nodes>budget)throw 'budget';
+    var ms=moves(mask),best=-1e9;for(var q=0;q<ms.length;q++){var i=ms[q],k=gain(i,mask),nm=mask&~(1<<i),val=k?k+solve(nm):-solve(nm);if(val>best)best=val}
+    memo.set(mask,best);return best}
+  var full=R===30?0x3fffffff:(1<<R)-1;
+  try{var ms=moves(full),best=-1e9,pick=[];ms.forEach(function(i){var k=gain(i,full),nm=full&~(1<<i),val=k?k+solve(nm):-solve(nm);if(val>best){best=val;pick=[i]}else if(val===best)pick.push(i)});
+    return u[pickRand(pick)]}catch(e){if(e==='budget')return null;throw e}}
 
 // ---------- game ----------
-function newGame(sameMap){clearTimeout(aiTimer);var N=opts.size,T=N*N;
-  var seed=sameMap&&G&&G.N===N?G.seed:(Math.random()*4294967296)>>>0;
-  var mz=makeMaze(N,seed);
-  G={N:N,T:T,seed:seed,adj:mz.adj,isOpen:mz.isOpen,own:new Array(T).fill(0),num:new Array(T).fill(0),sealed:new Array(T).fill(0),seq:[0,1,1],
-     per:opts.per,first:nextFirst,turn:nextFirst,left:1,over:false,last:-1,stamps:0};
-  G.own[0]=BLUE;G.num[0]=1;G.own[T-1]=RED;G.num[T-1]=1;
-  nextFirst=3-nextFirst;store.set('gw:first',nextFirst);
-  hist=[];cursor=-1;hintCell=-1;peek=false;flash=[];
+function newGame(){clearTimeout(aiTimer);geo=makeGeo(opts.size);
+  G={N:opts.size,drawn:new Array(geo.L).fill(0),owner:new Array(geo.B).fill(0),first:nextFirst,turn:nextFirst,over:false,last:-1,lastBoxes:[],again:false,moves:0};
+  nextFirst=3-nextFirst;store.set('gw2:first',nextFirst);
+  hist=[];hover=-1;peek=false;cur=null;
   $('#ov').hidden=true;$('#resultBtn').hidden=true;
-  render();draw();maybeAI()}
-function isAI(p){return opts.vs==='ai'&&p===RED}
-function snapshot(){return JSON.stringify({own:G.own,num:G.num,sealed:G.sealed,seq:G.seq,turn:G.turn,left:G.left,last:G.last,stamps:G.stamps})}
+  resize();render();maybeAI()}
+function isAI(p){return opts.vs==='ai'&&p===P2}
+function snapshot(){return JSON.stringify({drawn:G.drawn,owner:G.owner,turn:G.turn,last:G.last,lastBoxes:G.lastBoxes,again:G.again,moves:G.moves})}
 function restore(s){var o=JSON.parse(s);for(var k in o)G[k]=o[k];G.over=false}
-function play(i,byAI){if(G.over||G.own[i])return false;var legal=legalFor(G.own,G.adj,G.turn);if(legal.indexOf(i)<0)return false;
+function counts(){var c=[0,0,0];G.owner.forEach(function(o){c[o]++});return c}
+function play(l,byAI){if(!G||G.over||l==null||l<0||l>=geo.L||G.drawn[l])return false;
   hist.push({snap:snapshot(),who:G.turn,ai:!!byAI});
-  var p=G.turn;G.own[i]=p;G.num[i]=++G.seq[p];G.last=i;G.stamps++;hintCell=-1;
-  var got=sealPockets(G.own,G.adj,G.sealed);
-  if(got.length){var byOwner={1:0,2:0};got.forEach(function(c){byOwner[G.own[c]]++});flash=got;flashT=performance.now();
-    [1,2].forEach(function(q){if(byOwner[q])toast(EMO[q]+' '+NAME[q]+' seals off '+byOwner[q]+' square'+(byOwner[q]>1?'s':'')+'!',2000)})}
-  if(full(G.own)){finish();return true}
-  G.left--;if(G.left<=0){G.turn=3-G.turn;G.left=G.per}
+  var p=G.turn,got=completes(G.drawn,l);G.drawn[l]=p;got.forEach(function(b){G.owner[b]=p});
+  G.last=l;G.lastBoxes=got;G.moves++;flashT=performance.now();
+  if(G.drawn.every(function(x){return x})){finish();return true}
+  if(got.length){G.again=true;if(!isAI(p))toast((got.length===2?'Two boxes! ':'Box! ')+NAME[p]+' goes again',1400)}
+  else{G.again=false;G.turn=3-p}
   render();maybeAI();return true}
 function maybeAI(){clearTimeout(aiTimer);if(G.over||!isAI(G.turn))return;render();
-  aiTimer=setTimeout(function(){if(G.over||!isAI(G.turn))return;var m=chooseMove(opts.ai);if(m>=0)play(m,true)},520)}
-function finish(){G.over=true;var c=countOwn(G.own),w=c[1]>c[2]?BLUE:RED,margin=Math.abs(c[1]-c[2]),badge='';
-  if(opts.vs==='ai'){var r=REC[opts.ai]||{w:0,l:0,s:0,b:0};if(w===BLUE){r.w++;r.s++;if(margin>r.b){r.b=margin;badge='Best margin'}}else{r.l++;r.s=0}REC[opts.ai]=r}
-  else{var r2=REC['2p']||{b:0,r:0};if(w===BLUE)r2.b++;else r2.r++;REC['2p']=r2}
-  store.set('gw:rec',REC);render();draw();
-  setTimeout(function(){if(!G.over)return;$('#ovTitle').textContent=(opts.vs==='ai'?(w===BLUE?'You win! ':'The computer wins. '):'')+EMO[w]+' '+NAME[w]+(opts.vs==='ai'?'':' wins!');
+  aiTimer=setTimeout(function(){if(G.over||!isAI(G.turn))return;var m=chooseMove(opts.ai);if(m>=0)play(m,true)},G.again?380:560)}
+function finish(){G.over=true;G.again=false;var c=counts(),w=c[1]>c[2]?P1:c[2]>c[1]?P2:0,badge='';
+  if(opts.vs==='ai'){var r=REC[opts.ai]||{w:0,l:0,t:0,s:0};if(w===P1){r.w++;r.s=(r.s||0)+1;if(r.s>1)badge=r.s+' in a row'}else{if(w===P2)r.l++;else r.t=(r.t||0)+1;r.s=0}REC[opts.ai]=r}
+  else{var r2=REC['2p']||{a:0,b:0,t:0};if(w===P1)r2.a++;else if(w===P2)r2.b++;else r2.t++;REC['2p']=r2}
+  store.set('gw2:rec',REC);render();
+  setTimeout(function(){if(!G.over)return;
+    $('#ovTitle').textContent=w===0?"It's a tie!":opts.vs==='ai'?(w===P1?'You win!':'The computer wins'):NAME[w]+' wins!';
     $('#ovScore').textContent=c[1]+' – '+c[2];$('#ovBadge').innerHTML=badge?'<span class="badge">'+badge+'</span>':'';
-    $('#ovText').textContent='🧢 '+c[1]+' squares vs 🍓 '+c[2]+'. '+(opts.vs==='ai'&&w!==BLUE?'Try sealing a corridor earlier next time.':'Won by '+margin+'.');
-    $('#ov').hidden=false;$('#resultBtn').hidden=false;if(opts.vs==='2p'||w===BLUE)burst(['#38bdf8','#fb7185','#ffd23f','#eef0f7'])},450)}
-function undo(){if(!hist.length||(opts.vs==='ai'&&!hist.some(function(h){return !h.ai&&h.who===BLUE})))return;clearTimeout(aiTimer);var h;
-  if(opts.vs==='ai'){do{h=hist.pop()}while(hist.length&&(h.ai||h.who!==BLUE));if(h.ai||h.who!==BLUE){hist.push(h);return}}
-  else h=hist.pop();
-  restore(h.snap);$('#ov').hidden=true;$('#resultBtn').hidden=true;peek=false;flash=[];hintCell=-1;render();maybeAI()}
-function hint(){if(G.over||isAI(G.turn))return;hintCell=chooseMove('clever');if(hintCell>=0){cursor=-1;toast('💡 Try the square with the gold ring',1500)}}
+    $('#ovText').textContent='Red '+c[1]+' boxes, Blue '+c[2]+'. '+(w&&opts.vs==='ai'&&w===P2?'Tip: avoid drawing the third side of a box.':w?'Won by '+Math.abs(c[1]-c[2])+'.':'Dead even.');
+    $('#ov').hidden=false;$('#resultBtn').hidden=false;if(opts.vs==='2p'||w===P1)burst(['#fb7185','#38bdf8','#ffd23f','#eef0f7'])},500)}
+function undo(){if(!hist.length)return;var lastHuman=-1;for(var i=hist.length-1;i>=0;i--)if(!hist[i].ai){lastHuman=i;break}
+  if(opts.vs==='ai'){if(lastHuman<0)return;hist.length=lastHuman+1}
+  clearTimeout(aiTimer);var h=hist.pop();restore(h.snap);$('#ov').hidden=true;$('#resultBtn').hidden=true;render();maybeAI()}
 
 // ---------- UI ----------
-function render(){var c=countOwn(G.own),T=G.T;
-  $('#sBlue').textContent=c[1];$('#sRed').textContent=c[2];
-  $('#barB').style.width=(c[1]/T*100)+'%';$('#barR').style.width=(c[2]/T*100)+'%';
-  $('#nBlue').textContent=opts.vs==='ai'?'Blue Hat (you)':'Blue Hat';$('#nRed').textContent=opts.vs==='ai'?'Red Berry (AI)':'Red Berry';
-  $('#tBlue').classList.toggle('on',!G.over&&G.turn===BLUE);$('#tRed').classList.toggle('on',!G.over&&G.turn===RED);
-  if(G.over){$('#turnTxt').textContent='Game over';$('#stepTxt').textContent=c[1]+' – '+c[2]}
-  else{$('#turnTxt').textContent=EMO[G.turn]+' '+(G.turn===BLUE?'Blue':'Red')+"'s turn";
-    $('#stepTxt').textContent=isAI(G.turn)?'thinking…':(G.left>1?G.left+' stamps left':(G.per===2&&G.stamps>0?'last stamp':'1 stamp'))}
-  $('#leftTxt').textContent=c[0]+' empty square'+(c[0]===1?'':'s')+' · '+(G.first===BLUE?'🧢':'🍓')+' went first';
+function render(){var c=counts(),B=geo.B;
+  $('#s1').textContent=c[1];$('#s2').textContent=c[2];
+  $('#bar1').style.width=(c[1]/B*100)+'%';$('#bar2').style.width=(c[2]/B*100)+'%';
+  $('#role1').textContent=opts.vs==='ai'?'You':'Player 1';$('#role2').textContent=opts.vs==='ai'?'Computer':'Player 2';
+  $('#t1').classList.toggle('on',!G.over&&G.turn===P1);$('#t2').classList.toggle('on',!G.over&&G.turn===P2);
+  var pill=$('#pill');
+  if(G.over){$('#turnTxt').textContent='Game over';$('#stepTxt').textContent=c[1]+' – '+c[2];pill.classList.remove('again')}
+  else{$('#turnTxt').textContent=(opts.vs==='ai'&&G.turn===P1?'Your turn':NAME[G.turn]+"'s turn");
+    $('#stepTxt').textContent=G.again?'go again!':isAI(G.turn)?'thinking…':'draw a line';
+    $('#turnTxt').style.color=COL[G.turn];
+    if(G.again){pill.classList.remove('again');void pill.offsetWidth;pill.classList.add('again')}else pill.classList.remove('again')}
+  if(G.over)$('#turnTxt').style.color='';
+  var left=G.drawn.filter(function(x){return !x}).length;
+  $('#leftTxt').textContent=left+' line'+(left===1?'':'s')+' left · '+(c[0])+' open box'+(c[0]===1?'':'es')+' · '+NAME[G.first]+' went first';
   $('#undoBtn').disabled=!hist.length||(opts.vs==='ai'&&!hist.some(function(h){return !h.ai}));
-  $('#hintBtn').disabled=G.over||isAI(G.turn);
   $('#aiRow').hidden=opts.vs!=='ai';
-  [['#vsSeg','vs'],['#aiSeg','ai'],['#sizeSeg','size'],['#perSeg','per']].forEach(function(p){$$(p[0]+' button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.v===String(opts[p[1]])))})});
-  if(opts.vs==='ai'){var r=REC[opts.ai]||{w:0,l:0,s:0};$('#recTitle').textContent='Record vs AI · '+opts.ai[0].toUpperCase()+opts.ai.slice(1);$('#r1t').textContent='Wins';$('#r2t').textContent='Losses';$('#r3t').textContent='Streak';$('#r1').textContent=r.w;$('#r2').textContent=r.l;$('#r3').textContent=r.s}
-  else{var r2=REC['2p']||{b:0,r:0};$('#recTitle').textContent='2-player tally';$('#r1t').textContent='🧢 Wins';$('#r2t').textContent='🍓 Wins';$('#r3t').textContent='Games';$('#r1').textContent=r2.b;$('#r2').textContent=r2.r;$('#r3').textContent=r2.b+r2.r}}
+  [['#vsSeg','vs'],['#aiSeg','ai'],['#sizeSeg','size']].forEach(function(p){$$(p[0]+' button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.v===String(opts[p[1]])))})});
+  if(opts.vs==='ai'){var r=REC[opts.ai]||{w:0,l:0,t:0};$('#recTitle').textContent='Record vs computer · '+opts.ai[0].toUpperCase()+opts.ai.slice(1);$('#r1t').textContent='Wins';$('#r2t').textContent='Losses';$('#r3t').textContent='Ties';$('#r1').textContent=r.w;$('#r2').textContent=r.l;$('#r3').textContent=r.t||0}
+  else{var r2=REC['2p']||{a:0,b:0,t:0};$('#recTitle').textContent='2-player tally';$('#r1t').textContent='Red';$('#r2t').textContent='Blue';$('#r3t').textContent='Ties';$('#r1').textContent=r2.a;$('#r2').textContent=r2.b;$('#r3').textContent=r2.t}}
 
-var cv=$('#board'),ctx=cv.getContext('2d'),S=400,M=14,CS=74,dpr=1;
-function resize(){dpr=Math.max(1,window.devicePixelRatio||1);S=cv.clientWidth||400;cv.width=Math.round(S*dpr);cv.height=Math.round(S*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);M=Math.max(10,S*.035);CS=(S-2*M)/G.N;draw()}
+var cv=$('#board'),ctx=cv.getContext('2d'),S=400,M=30,CS=70,dpr=1;
+function resize(){if(!geo)return;dpr=Math.max(1,window.devicePixelRatio||1);S=cv.clientWidth||400;cv.width=Math.round(S*dpr);cv.height=Math.round(S*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);CS=S/(geo.N+0.9);M=CS*.45}
+function dot(r,c){return [M+c*CS,M+r*CS]}
+function lineMid(l){var e=lineDots(l),a=dot(e[0],e[1]),b=dot(e[2],e[3]);return [(a[0]+b[0])/2,(a[1]+b[1])/2]}
 function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
-function cellXY(i){return [M+(i%G.N)*CS,M+Math.floor(i/G.N)*CS]}
-function draw(t){if(!G)return;var now=t||performance.now(),N=G.N,T=G.T,i;ctx.clearRect(0,0,S,S);
-  var legal=(!G.over&&!isAI(G.turn))?legalFor(G.own,G.adj,G.turn):[],pulse=.5+.5*Math.sin(now/260);
-  var fl=flash.length&&now-flashT<900?1-(now-flashT)/900:0;
-  for(i=0;i<T;i++){var xy=cellXY(i),x=xy[0],y=xy[1],p=G.own[i],pad=CS*.08;
-    if(p){ctx.fillStyle='rgba('+RGB[p]+','+(G.sealed[i]?.16:.26)+')';rr(x+pad,y+pad,CS-2*pad,CS-2*pad,CS*.16);ctx.fill();
-      ctx.strokeStyle='rgba('+RGB[p]+','+(G.sealed[i]?.35:.6)+')';ctx.lineWidth=1.5;ctx.stroke();
-      ctx.save();ctx.globalAlpha=G.sealed[i]?.55:1;ctx.font=(CS*(G.sealed[i]?.34:.44))+'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(EMO[p],x+CS/2,y+CS/2+CS*.03);ctx.restore();
-      if(G.num[i]){ctx.font='700 '+Math.max(9,CS*.17)+'px ui-monospace,Menlo,Consolas,monospace';ctx.textAlign='left';ctx.textBaseline='top';ctx.fillStyle=COL[p];ctx.fillText(G.num[i],x+pad+CS*.06,y+pad+CS*.04)}}
-    else{ctx.fillStyle='rgba(255,255,255,.03)';rr(x+pad,y+pad,CS-2*pad,CS-2*pad,CS*.16);ctx.fill()}
-    if(fl&&flash.indexOf(i)>=0){ctx.fillStyle='rgba(255,255,255,'+(fl*.45)+')';rr(x+pad,y+pad,CS-2*pad,CS-2*pad,CS*.16);ctx.fill()}
-    if(legal.indexOf(i)>=0){ctx.strokeStyle='rgba('+RGB[G.turn]+','+(.45+.45*pulse)+')';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(x+CS/2,y+CS/2,CS*(.2+.03*pulse),0,7);ctx.stroke();
-      if(i===hover){ctx.fillStyle='rgba('+RGB[G.turn]+',.22)';rr(x+pad,y+pad,CS-2*pad,CS-2*pad,CS*.16);ctx.fill()}}
-    if(i===G.last&&!G.over){ctx.strokeStyle='rgba(255,255,255,.85)';ctx.lineWidth=2;rr(x+pad,y+pad,CS-2*pad,CS-2*pad,CS*.16);ctx.stroke()}
-    if(i===hintCell){ctx.strokeStyle='#ffd23f';ctx.lineWidth=3;ctx.beginPath();ctx.arc(x+CS/2,y+CS/2,CS*.32,0,7);ctx.stroke()}
-    if(i===cursor){ctx.save();ctx.setLineDash([5,4]);ctx.strokeStyle=G.over?'#fff':COL[G.turn];ctx.lineWidth=2;rr(x+3,y+3,CS-6,CS-6,CS*.18);ctx.stroke();ctx.restore()}}
-  // doorways (faint) and walls (bold marker lines)
+function seg(l){var e=lineDots(l),a=dot(e[0],e[1]),b=dot(e[2],e[3]);ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1])}
+function cursorLine(){if(!cur)return -1;var y=cur[0],x=cur[1],N=geo.N;if(y%2===0&&x%2===1)return (y/2)*N+(x-1)/2;if(y%2===1&&x%2===0)return geo.HN+((y-1)/2)*(N+1)+x/2;return -1}
+function draw(t){if(!G||!geo)return;var now=t||performance.now(),N=geo.N,i;ctx.clearRect(0,0,S,S);
+  var fl=now-flashT<700?1-(now-flashT)/700:0,pulse=.5+.5*Math.sin(now/240),W=Math.max(4,CS*.085);
+  // boxes
+  for(i=0;i<geo.B;i++){var p=G.owner[i];if(!p)continue;var r=Math.floor(i/N),c=i%N,xy=dot(r,c),pad=CS*.1;
+    ctx.fillStyle='rgba('+RGB[p]+',.26)';rr(xy[0]+pad,xy[1]+pad,CS-2*pad,CS-2*pad,CS*.12);ctx.fill();
+    if(fl&&G.lastBoxes.indexOf(i)>=0){ctx.fillStyle='rgba(255,255,255,'+(fl*.5)+')';ctx.fill()}
+    ctx.fillStyle=COL[p];ctx.font='800 '+(CS*.42)+'px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p===P1?'R':'B',xy[0]+CS/2,xy[1]+CS/2+CS*.02)}
   ctx.lineCap='round';
-  for(var r=0;r<N;r++)for(var c=0;c<N;c++){i=r*N+c;var x0=M+c*CS,y0=M+r*CS;
-    if(c<N-1){var o=G.isOpen(i,i+1);line(x0+CS,y0,x0+CS,y0+CS,o)}
-    if(r<N-1){var o2=G.isOpen(i,i+N);line(x0,y0+CS,x0+CS,y0+CS,o2)}}
-  ctx.strokeStyle='#e7eaf6';ctx.lineWidth=Math.max(3,CS*.075);ctx.strokeRect(M,M,CS*N,CS*N);
-  ctx.fillStyle='#e7eaf6';for(r=0;r<=N;r++)for(c=0;c<=N;c++){ctx.beginPath();ctx.arc(M+c*CS,M+r*CS,Math.max(2.2,CS*.05),0,7);ctx.fill()}}
-function line(x1,y1,x2,y2,open){if(open){ctx.save();ctx.setLineDash([2,6]);ctx.strokeStyle='rgba(255,255,255,.14)';ctx.lineWidth=1.5}else{ctx.save();ctx.strokeStyle='#e7eaf6';ctx.lineWidth=Math.max(3,CS*.075);ctx.shadowColor='rgba(180,200,255,.35)';ctx.shadowBlur=6}
-  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.restore()}
+  // empty line slots
+  ctx.save();ctx.setLineDash([2,7]);ctx.strokeStyle='rgba(255,255,255,.16)';ctx.lineWidth=1.6;
+  for(i=0;i<geo.L;i++)if(!G.drawn[i]){seg(i);ctx.stroke()}ctx.restore();
+  // preview of the line under the mouse / keyboard cursor
+  var canAct=!G.over&&!isAI(G.turn),cl=cursorLine();
+  [hover,cl].forEach(function(l,k){if(l<0||G.drawn[l]||!canAct)return;ctx.save();ctx.strokeStyle='rgba('+RGB[G.turn]+','+(k?.5+.35*pulse:.55)+')';ctx.lineWidth=W;seg(l);ctx.stroke();ctx.restore()});
+  // drawn lines
+  for(i=0;i<geo.L;i++){var o=G.drawn[i];if(!o||i===G.last)continue;ctx.strokeStyle=COL[o];ctx.lineWidth=W;seg(i);ctx.stroke()}
+  if(G.last>=0&&G.drawn[G.last]){ctx.save();ctx.shadowColor='rgba(255,255,255,.9)';ctx.shadowBlur=10+8*pulse;ctx.strokeStyle=COL[G.drawn[G.last]];ctx.lineWidth=W*1.25;seg(G.last);ctx.stroke();ctx.restore();
+    ctx.save();ctx.strokeStyle='rgba(255,255,255,'+(.55+.35*pulse)+')';ctx.lineWidth=Math.max(1.5,W*.3);seg(G.last);ctx.stroke();ctx.restore()}
+  // keyboard cursor on a dot / box centre
+  if(cur&&cl<0){var cx=M+cur[1]*CS/2,cy=M+cur[0]*CS/2;ctx.save();ctx.setLineDash([4,4]);ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,CS*.16,0,7);ctx.stroke();ctx.restore()}
+  if(cur&&cl>=0&&G.drawn[cl]){var mm=lineMid(cl);ctx.save();ctx.setLineDash([4,4]);ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(mm[0],mm[1],CS*.16,0,7);ctx.stroke();ctx.restore()}
+  // dots
+  ctx.fillStyle='#eef0f7';var R=Math.max(3.5,CS*.075);for(var r2=0;r2<=N;r2++)for(var c2=0;c2<=N;c2++){var d=dot(r2,c2);ctx.beginPath();ctx.arc(d[0],d[1],R,0,7);ctx.fill()}}
 function loop(t){draw(t);requestAnimationFrame(loop)}
-function cellAt(e){var b=cv.getBoundingClientRect(),x=(e.clientX-b.left)*(S/b.width)-M,y=(e.clientY-b.top)*(S/b.height)-M;
-  if(x<0||y<0||x>=CS*G.N||y>=CS*G.N)return -1;return Math.floor(y/CS)*G.N+Math.floor(x/CS)}
-function humanTry(i){if(i<0||G.over||isAI(G.turn))return;
-  if(G.own[i]){toast(G.own[i]===G.turn?'You already own that square':'That square is taken');return}
-  if(!play(i,false)){var w=$('#cvwrap');w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');toast('No open doorway from your squares to there')}}
-cv.addEventListener('click',function(e){humanTry(cellAt(e))});
-cv.addEventListener('pointermove',function(e){if(e.pointerType==='mouse')hover=cellAt(e)});
+// nearest undrawn line to a point; the whole board is a touch target
+function lineAt(e){var b=cv.getBoundingClientRect(),x=(e.clientX-b.left)*(S/b.width),y=(e.clientY-b.top)*(S/b.height),best=-1,bd=CS*.6;
+  for(var l=0;l<geo.L;l++){if(G.drawn[l])continue;var q=lineDots(l),a=dot(q[0],q[1]),c=dot(q[2],q[3]),dx=c[0]-a[0],dy=c[1]-a[1],tt=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy))),px=a[0]+tt*dx-x,py=a[1]+tt*dy-y,dd=Math.sqrt(px*px+py*py);
+    if(dd<bd){bd=dd;best=l}}return best}
+function humanTry(l){if(!G||G.over||isAI(G.turn))return;
+  if(l<0||G.drawn[l]){var w=$('#cvwrap');w.classList.remove('shake');void w.offsetWidth;w.classList.add('shake');if(l>=0)toast('That line is already drawn');return}
+  play(l,false)}
+cv.addEventListener('click',function(e){cur=null;humanTry(lineAt(e))});
+cv.addEventListener('pointermove',function(e){if(e.pointerType==='mouse')hover=lineAt(e)});
 cv.addEventListener('pointerleave',function(){hover=-1});
-document.addEventListener('keydown',function(e){if(helpOpen()||e.ctrlKey||e.metaKey||e.altKey)return;var k=e.key,N=G.N;
-  var mv={ArrowUp:[-1,0],ArrowDown:[1,0],ArrowLeft:[0,-1],ArrowRight:[0,1],w:[-1,0],s:[1,0],a:[0,-1],d:[0,1]}[k.length===1?k.toLowerCase():k];
-  if(mv){e.preventDefault();if(cursor<0)cursor=G.turn===RED?G.T-1:0;var r=Math.min(N-1,Math.max(0,Math.floor(cursor/N)+mv[0])),c=Math.min(N-1,Math.max(0,cursor%N+mv[1]));cursor=r*N+c;return}
-  if((k==='Enter'||k===' ')&&cursor>=0&&(document.activeElement===cv||document.activeElement===document.body)){e.preventDefault();humanTry(cursor);return}
-  if(k==='u'||k==='U')undo();else if(k==='h'||k==='H')hint();else if(k==='n'||k==='N')newGame(false)});
-$('#newBtn').addEventListener('click',function(){newGame(false)});
-$('#againBtn').addEventListener('click',function(){newGame(false)});
-$('#sameBtn').addEventListener('click',function(){newGame(true)});
+document.addEventListener('keydown',function(e){if(helpOpen()||e.ctrlKey||e.metaKey||e.altKey)return;var k=e.key,E=2*geo.N;
+  var mv={ArrowUp:[-1,0],ArrowDown:[1,0],ArrowLeft:[0,-1],ArrowRight:[0,1]}[k];
+  if(mv){e.preventDefault();hover=-1;if(!cur)cur=[0,1];else cur=[Math.min(E,Math.max(0,cur[0]+mv[0])),Math.min(E,Math.max(0,cur[1]+mv[1]))];return}
+  if((k==='Enter'||k===' ')&&cur&&(document.activeElement===cv||document.activeElement===document.body)){e.preventDefault();var l=cursorLine();if(l>=0)humanTry(l);return}
+  if(k==='u'||k==='U')undo();else if(k==='n'||k==='N')newGame()});
+$('#newBtn').addEventListener('click',newGame);
+$('#againBtn').addEventListener('click',newGame);
 $('#peekBtn').addEventListener('click',function(){$('#ov').hidden=true});
 $('#resultBtn').addEventListener('click',function(){$('#ov').hidden=false});
-$('#undoBtn').addEventListener('click',undo);$('#hintBtn').addEventListener('click',hint);
-[['#vsSeg','vs'],['#aiSeg','ai'],['#sizeSeg','size'],['#perSeg','per']].forEach(function(p){$$(p[0]+' button').forEach(function(b){b.addEventListener('click',function(){var v=b.dataset.v;opts[p[1]]=(p[1]==='size'||p[1]==='per')?+v:v;store.set('gw:opts',opts);newGame(false);resize();b.blur()})})});
+$('#undoBtn').addEventListener('click',undo);
+[['#vsSeg','vs'],['#aiSeg','ai'],['#sizeSeg','size']].forEach(function(p){$$(p[0]+' button').forEach(function(b){b.addEventListener('click',function(){var v=b.dataset.v;opts[p[1]]=p[1]==='size'?+v:v;store.set('gw2:opts',opts);newGame();b.blur()})})});
 addEventListener('resize',resize);
-setupHelp('gw');newGame(false);resize();requestAnimationFrame(loop);
-window.gridwar={get G(){return G},opts:opts,play:function(i){return play(i,false)},legal:function(){return legalFor(G.own,G.adj,G.turn)},choose:chooseMove,newGame:newGame,undo:undo,
-  setOpts:function(o){for(var k in o)opts[k]=o[k];store.set('gw:opts',opts);newGame(false);resize()},makeMaze:makeMaze,cellXY:function(i){var p=cellXY(i);return [p[0]+CS/2,p[1]+CS/2]}};
+setupHelp('gw2');newGame();requestAnimationFrame(loop);
+window.gridwar={get G(){return G},get geo(){return geo},opts:opts,play:function(l){return play(l,false)},legal:function(){return undrawn(G.drawn)},choose:chooseMove,newGame:newGame,undo:undo,
+  completes:function(l){return completes(G.drawn,l)},isSafe:function(l){return isSafe(G.drawn,l)},solve:function(b){return solveBest(G.drawn,b||700000)},
+  setOpts:function(o){clearTimeout(aiTimer);for(var k in o)opts[k]=o[k];store.set('gw2:opts',opts);newGame()},
+  hLine:function(r,c){return r*geo.N+c},vLine:function(r,c){return geo.HN+r*(geo.N+1)+c},lineXY:function(l){return lineMid(l)}};
 })();
 </script>
 </body>
