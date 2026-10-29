@@ -1,0 +1,10 @@
+{
+  "categories": [
+    { "id": "briefs", "name": "Briefs", "blurb": "Short one- or two-page summaries to read before a meeting or outing." },
+    { "id": "presentations", "name": "Presentations", "blurb": "Slide decks used in meetings and skill sessions." },
+    { "id": "handouts", "name": "Handouts & Guides", "blurb": "Printable checklists, worksheets and reference guides." },
+    { "id": "skills", "name": "Skills / How-tos", "blurb": "Step-by-step help for scout skills." },
+    { "id": "links", "name": "Links", "blurb": "Useful pages elsewhere on the web." }
+  ],
+  "resources": []
+}

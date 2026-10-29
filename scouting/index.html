@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scouting Resources · Scott Summers</title>
+  <meta name="description" content="Free briefs, presentations, handouts and how-tos for scouts. An unofficial resource page.">
+  <meta name="theme-color" content="#07080f">
+  <meta property="og:title" content="Scouting Resources · Scott Summers">
+  <meta property="og:description" content="Free briefs, presentations, handouts and how-tos for scouts.">
+  <meta property="og:url" content="https://scottsummers.github.io/scouting/">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://scottsummers.github.io/scouting/">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="stylesheet" href="scouting.css">
+</head>
+<body class="scouting-page">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <div class="bg" aria-hidden="true">
+    <span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span>
+    <span class="grid"></span><span class="grain"></span>
+  </div>
+
+  <div class="nav-wrap"><header class="nav">
+    <a class="brand" href="/" aria-label="Scott Summers, home">
+      <img src="../assets/favicon.svg" alt="" width="28" height="28"><span>Scott Summers</span>
+    </a>
+    <nav aria-label="Primary">
+      <ul>
+        <li><a href="/#games">Games</a></li>
+        <li><a href="/#projects">Projects</a></li>
+        <li><a href="/scouting/" aria-current="page">Scouting</a></li>
+        <li><a class="nav-gh" href="/">← Home</a></li>
+      </ul>
+    </nav>
+  </header></div>
+
+  <main id="main">
+    <section class="sc-hero" aria-labelledby="sc-title">
+      <span class="sc-badge" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="19" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="24" cy="24" r="14" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/><path d="M24 9.5v3M24 35.5v3M9.5 24h3M35.5 24h3" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M29.5 18.5 26 26l-7.5 3.5L22 22Z" fill="currentColor"/><circle cx="24" cy="24" r="1.8" fill="#07080f"/></svg>
+      </span>
+      <p class="kicker">Resources · Scouting</p>
+      <h1 id="sc-title" class="sc-h1">Scouting <span class="grad">resources</span></h1>
+      <p class="tagline">Briefs, presentations, handouts and how-tos that scouts can open, download and use. Free to use, nothing to sign in to.</p>
+      <p class="sc-note">This is an unofficial resource page. It isn't affiliated with or endorsed by any scouting organization.</p>
+    </section>
+
+    <section class="section sc-library" aria-labelledby="lib-title">
+      <h2 id="lib-title" class="sr-only">Resource library</h2>
+      <div class="sc-tools glass" role="search">
+        <label class="sc-search">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span class="sr-only">Search resources</span>
+          <input id="q" type="search" placeholder="Search resources" autocomplete="off" enterkeyhint="search">
+        </label>
+        <div class="sc-chips" id="chips" role="group" aria-label="Filter by category"></div>
+      </div>
+      <p class="sc-status" id="status" aria-live="polite"></p>
+      <div id="groups"></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>© <span id="yr">2026</span> Scott Summers · Unofficial scouting resource page</p>
+    <a href="/">← Back to scottsummers.github.io</a>
+  </footer>
+
+  <script src="scouting.js"></script>
+</body>
+</html>
