@@ -243,4 +243,6 @@ h2{margin:0;font:700 clamp(1.9rem,4vw,2.6rem)/1.1 var(--display);letter-spacing:
 @media (max-width:560px){.brain{grid-template-columns:1fr}.game.mini .game-art{height:110px}}
 .game-art.art-sd{color:#c4b5fd;background:radial-gradient(circle at 30% 25%,rgba(167,139,250,.32),transparent 60%),linear-gradient(135deg,#16122a,#0d1220)}
 .game-art.art-sn{color:#ff8a5c;background:radial-gradient(circle at 70% 25%,rgba(255,120,73,.32),transparent 60%),linear-gradient(135deg,#1e1210,#120f1c)}
+.art-pu{--g:#34d399;--g2:#a78bfa}
+.game-art.art-pu{color:#e6ebff;background:radial-gradient(circle at 25% 30%,rgba(52,211,153,.3),transparent 55%),radial-gradient(circle at 75% 75%,rgba(167,139,250,.32),transparent 55%),linear-gradient(135deg,#0e1a1c,#161228)}
 .game-art.art-gw{color:#e6ebff;background:radial-gradient(circle at 25% 25%,rgba(56,189,248,.3),transparent 55%),radial-gradient(circle at 75% 75%,rgba(251,113,133,.3),transparent 55%),linear-gradient(135deg,#0e1724,#1e1218)}
