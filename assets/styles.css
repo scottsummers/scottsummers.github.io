@@ -246,3 +246,19 @@ h2{margin:0;font:700 clamp(1.9rem,4vw,2.6rem)/1.1 var(--display);letter-spacing:
 .art-pu{--g:#34d399;--g2:#a78bfa}
 .game-art.art-pu{color:#e6ebff;background:radial-gradient(circle at 25% 30%,rgba(52,211,153,.3),transparent 55%),radial-gradient(circle at 75% 75%,rgba(167,139,250,.32),transparent 55%),linear-gradient(135deg,#0e1a1c,#161228)}
 .game-art.art-gw{color:#e6ebff;background:radial-gradient(circle at 25% 25%,rgba(56,189,248,.3),transparent 55%),radial-gradient(circle at 75% 75%,rgba(251,113,133,.3),transparent 55%),linear-gradient(135deg,#0e1724,#1e1218)}
+/* ---------- scouting ---------- */
+.scout-card{display:grid;grid-template-columns:minmax(220px,2fr) 3fr;--g:#7ee0a1}
+.scout-card .scout-art{height:auto;min-height:220px;border-bottom:0;border-right:1px solid var(--line);color:#a8f0c2;background:radial-gradient(circle at 30% 25%,rgba(126,224,161,.3),transparent 60%),radial-gradient(circle at 80% 80%,rgba(232,194,107,.2),transparent 55%),linear-gradient(135deg,#0e1a14,#141a12)}
+.scout-card .scout-art svg{width:130px;height:130px}
+.scout-card .card-body{padding:1.6rem 1.7rem 1.8rem;gap:.7rem}
+.scout-card h3{font-size:1.55rem}
+.scout-card .tag.live{color:#a8f0c2;background:rgba(126,224,161,.12);border-color:rgba(126,224,161,.35)}
+.scout-card .btn.play{background:linear-gradient(110deg,#c8f5d6,#7ee0a1);box-shadow:0 10px 30px -12px rgba(126,224,161,.6)}
+.scout-card::before{background:radial-gradient(420px circle at var(--mx,50%) var(--my,0%),rgba(126,224,161,.14),transparent 45%)}
+.scout-cats{display:flex;flex-wrap:wrap;gap:.4rem;list-style:none;margin:0 0 .6rem;padding:0}
+.scout-cats li{padding:.28rem .7rem;border-radius:999px;font-size:.8rem;font-weight:500;color:var(--muted);background:rgba(255,255,255,.05);border:1px solid var(--line)}
+@media (max-width:760px){
+  .scout-card{grid-template-columns:1fr}
+  .scout-card .scout-art{min-height:150px;border-right:0;border-bottom:1px solid var(--line)}
+  .scout-card .scout-art svg{width:100px;height:100px}
+}
