@@ -23,3 +23,4 @@ Rotation: once more than 20 games are showing on the homepage, the oldest weekly
 | Date | Name | Slug | Genre | Description | Status |
 |---|---|---|---|---|---|
 | 2026-10-29 | Pair Up | `pair-up` | Memory | Classic memory card game: flip two cards to find matching pairs, solo against the clock, 2 players, or vs a computer with Easy, Normal and Sharp memory. | Live |
+| 2026-11-05 | Mancala | `mancala` | Classic board game (count-and-capture strategy) | Ancient stone-sowing game with Kalah rules: sow stones around the board, land in your store for an extra turn and capture from an empty pit, vs a computer at Easy, Normal and Hard or 2 players. | Live |
