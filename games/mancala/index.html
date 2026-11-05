@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mancala · Scott Summers</title>
+<meta name="description" content="Mancala: the ancient stone-sowing board game (Kalah rules). Scoop up a pit, sow the stones around the board, earn extra turns and capture your opponent's stones. Play the computer at three levels or a friend on one device. Works offline, no sign-in.">
+<meta name="theme-color" content="#07080f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23101324'/%3E%3Crect x='3' y='9' width='26' height='14' rx='7' fill='%232a1f14' stroke='%23fbbf24' stroke-width='1.5'/%3E%3Ccircle cx='10' cy='16' r='3' fill='%2338bdf8'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23fbbf24'/%3E%3Ccircle cx='22' cy='16' r='3' fill='%2338bdf8'/%3E%3C/svg%3E">
+<style>
+:root{--acc:#38bdf8;--acc2:#fbbf24;--p1:#38bdf8;--p2:#fbbf24}
+:root{--bg:#07080f;--text:#eef0f7;--muted:#a9b0c6;--faint:#7d859e;--line:rgba(255,255,255,.10);--line-hi:rgba(255,255,255,.22);--glass:rgba(255,255,255,.05);--font:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;--mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;--acc-glow:color-mix(in srgb,var(--acc) 26%,transparent);--acc2-glow:color-mix(in srgb,var(--acc2) 22%,transparent)}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font:16px/1.5 var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(900px 520px at 12% -12%,var(--acc-glow),transparent 62%),radial-gradient(800px 600px at 105% 110%,var(--acc2-glow),transparent 60%),radial-gradient(1200px 700px at 50% -20%,#141a3a,var(--bg) 62%)}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;opacity:.28;-webkit-mask-image:radial-gradient(ellipse 70% 55% at 50% 10%,#000 15%,transparent 75%);mask-image:radial-gradient(ellipse 70% 55% at 50% 10%,#000 15%,transparent 75%)}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.top{max-width:1000px;margin:0 auto;padding:.9rem 1.2rem .6rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.home{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .85rem;border-radius:999px;border:1px solid var(--line-hi);background:var(--glass);color:var(--muted);text-decoration:none;font-size:.88rem;font-weight:600;transition:color .2s,background .2s}
+.home:hover{color:var(--text);background:rgba(255,255,255,.09)}
+.title{display:flex;align-items:center;gap:.6rem;margin:0;flex:1;min-width:0;font:800 clamp(1.25rem,3vw,1.7rem)/1.1 var(--font);letter-spacing:-.03em}
+.title i{flex:none;width:13px;height:13px;border-radius:4px;background:linear-gradient(135deg,var(--acc),var(--acc2));box-shadow:0 0 18px var(--acc)}
+.title .sub{font-weight:600;font-size:.62em;color:var(--muted);letter-spacing:0;white-space:nowrap}
+.actions{display:flex;gap:.5rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.6rem 1rem;border-radius:12px;border:1px solid var(--line-hi);background:var(--glass);font-weight:600;font-size:.93rem;line-height:1.2;transition:transform .15s,background .2s,border-color .2s,box-shadow .2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.btn:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.35)}
+.btn:active{transform:scale(.97)}
+.btn.primary{color:#0a0b14;border-color:transparent;background:linear-gradient(110deg,var(--acc),var(--acc2));box-shadow:0 10px 26px -12px var(--acc)}
+.btn.primary:hover{box-shadow:0 14px 32px -12px var(--acc);filter:brightness(1.06)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.wrap{max-width:1000px;margin:0 auto;padding:.4rem 1.2rem 2.5rem}
+.glass{background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:20px;-webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 20px 50px -30px rgba(0,0,0,.8)}
+.seg{display:inline-flex;padding:.25rem;gap:.2rem;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25)}
+.seg button{border:0;background:transparent;padding:.45rem .85rem;border-radius:9px;color:var(--muted);font-weight:600;font-size:.88rem;white-space:nowrap}
+.seg button[aria-pressed="true"]{color:#0a0b14;background:linear-gradient(110deg,var(--acc),var(--acc2))}
+.seg button:not([aria-pressed="true"]):hover{color:var(--text);background:rgba(255,255,255,.07)}
+.muted{color:var(--muted)}
+.kbd{font:600 .74rem var(--mono);padding:.08rem .4rem;border-radius:6px;border:1px solid var(--line-hi);background:rgba(255,255,255,.06);color:var(--text)}
+.hint{margin:.9rem 0 0;color:var(--faint);font-size:.84rem;text-align:center}
+dialog{max-width:min(540px,calc(100vw - 2rem));padding:1.5rem 1.5rem 1.3rem;color:var(--text);border:1px solid var(--line-hi);border-radius:20px;background:linear-gradient(160deg,#171a2c,#0d0f1c);box-shadow:0 30px 80px -20px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.03)}
+dialog::backdrop{background:rgba(4,5,12,.7);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+dialog h2{margin:0 0 .6rem;font:800 1.35rem var(--font);letter-spacing:-.02em}
+dialog h2 span{background:linear-gradient(110deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+dialog ul{margin:.4rem 0 1.1rem;padding-left:1.15rem;color:var(--muted);font-size:.94rem}
+dialog li{margin:.32rem 0}
+dialog li b{color:var(--text)}
+dialog .btn{width:100%}
+[hidden]{display:none!important}
+.toast{position:fixed;left:50%;bottom:1.4rem;z-index:30;transform:translate(-50%,160%);opacity:0;visibility:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .25s,visibility .35s;padding:.7rem 1.1rem;border-radius:14px;border:1px solid var(--line-hi);background:rgba(16,18,32,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-weight:600;box-shadow:0 16px 40px -16px rgba(0,0,0,.9);pointer-events:none;max-width:calc(100vw - 2rem);text-align:center}
+.toast.show{transform:translate(-50%,0);opacity:1;visibility:visible}
+.overlay{position:absolute;inset:0;z-index:5;display:grid;place-items:center;padding:1rem;border-radius:18px;background:rgba(7,8,15,.76);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);text-align:center;animation:fade .3s both}
+.overlay[hidden]{display:none}
+.overlay h2{margin:0 0 .3rem;font:800 clamp(1.5rem,4vw,2.1rem) var(--font);letter-spacing:-.03em}
+.overlay .big{font:800 clamp(2.4rem,7vw,3.4rem)/1 var(--font);background:linear-gradient(110deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent;margin:.3rem 0}
+.badge{display:inline-block;margin:.3rem 0 .6rem;padding:.2rem .7rem;border-radius:999px;font:700 .75rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#0a0b14;background:linear-gradient(110deg,var(--acc),var(--acc2))}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:40}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:1.1rem;align-items:start}
+.stage{position:relative;padding:1rem;display:flex;flex-direction:column;align-items:center;min-width:0}
+.bar{width:100%;max-width:600px;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:.55rem;align-items:center;margin-bottom:.8rem}
+.team{display:flex;align-items:center;gap:.6rem;padding:.45rem .7rem;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.035);transition:border-color .2s,box-shadow .2s,background .2s;min-width:0}
+.team.p2{flex-direction:row-reverse;text-align:right}
+.team.on.p1{border-color:rgba(52,211,153,.85);background:rgba(52,211,153,.12);box-shadow:0 0 24px -8px rgba(52,211,153,.75)}
+.team.on.p2{border-color:rgba(167,139,250,.85);background:rgba(167,139,250,.13);box-shadow:0 0 24px -8px rgba(167,139,250,.75)}
+.team .sw{flex:none;min-width:42px;height:42px;padding:0 .3rem;border-radius:11px;display:grid;place-items:center;font:800 1.35rem/1 var(--font);font-variant-numeric:tabular-nums;color:#0a0b14}
+.p1 .sw{background:linear-gradient(140deg,#6ee7b7,#34d399)}
+.p2 .sw{background:linear-gradient(140deg,#c4b5fd,#a78bfa)}
+.team .meta{min-width:0;line-height:1.15}
+.team .nm{display:block;font:800 1rem var(--font);overflow-wrap:break-word}
+.p1 .nm{color:var(--p1)}.p2 .nm{color:var(--p2)}
+.team .role{display:block;font-size:.74rem;color:var(--muted);font-weight:600}
+.pill{display:flex;flex-direction:column;align-items:center;padding:.35rem .7rem;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.3);min-width:108px;text-align:center}
+.pill b{font:750 .86rem var(--font);white-space:nowrap}
+.pill small{font:600 .68rem var(--mono);color:var(--faint);white-space:nowrap}
+.pill.again{border-color:rgba(255,210,63,.55);animation:pop .4s}.pill.again small{color:#ffd23f}
+@keyframes pop{40%{transform:scale(1.08)}}
+.under{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-top:.8rem;color:var(--muted);font-size:.9rem;min-height:1.6rem}
+.side{display:flex;flex-direction:column;gap:1rem}
+.panel{padding:1rem}
+.panel h3{margin:0 0 .7rem;font:750 .95rem var(--font)}
+.opt{margin:0 0 .75rem}
+.opt label{display:block;font:600 .68rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:.3rem}
+.opt .seg{flex-wrap:wrap}
+.opt .seg button{padding:.45rem .75rem}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:0;padding:0}
+.stat{margin:0;padding:.5rem .7rem;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.035);min-width:0}
+.stat dt{font:600 .62rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.stat dd{margin:.1rem 0 0;font:750 1.2rem/1.2 var(--font);font-variant-numeric:tabular-nums}
+.stat.hi dd{color:var(--acc)}
+.small{font-size:.82rem;color:var(--muted);margin:.6rem 0 0;line-height:1.45}
+@media (max-width:860px){.layout{grid-template-columns:1fr}.side{display:contents}}
+.team.on.p1{border-color:rgba(56,189,248,.85);background:rgba(56,189,248,.12);box-shadow:0 0 24px -8px rgba(56,189,248,.75)}
+.team.on.p2{border-color:rgba(251,191,36,.85);background:rgba(251,191,36,.12);box-shadow:0 0 24px -8px rgba(251,191,36,.75)}
+.p1 .sw{background:linear-gradient(140deg,#7dd3fc,#38bdf8)}
+.p2 .sw{background:linear-gradient(140deg,#fde68a,#fbbf24)}
+.board-wrap{position:relative;width:100%;max-width:640px}
+.mboard{display:grid;grid-template-columns:minmax(0,1.15fr) repeat(6,minmax(0,1fr)) minmax(0,1.15fr);grid-template-rows:auto auto;gap:clamp(.25rem,1.2vw,.55rem);padding:clamp(.45rem,1.8vw,.9rem);border-radius:clamp(22px,5vw,44px);background:radial-gradient(120% 140% at 30% 0%,#3a2a1a,#22180f 60%,#170f0a);border:1px solid rgba(251,191,36,.25);box-shadow:inset 0 2px 0 rgba(255,255,255,.08),inset 0 -6px 18px rgba(0,0,0,.45),0 24px 50px -28px rgba(0,0,0,.9)}
+.pit,.store{position:relative;border:0;padding:0;border-radius:999px;background:radial-gradient(circle at 50% 35%,#120c07,#1d140c 70%,#2a1d12);box-shadow:inset 0 4px 10px rgba(0,0,0,.65),0 1px 0 rgba(255,255,255,.06);touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:box-shadow .2s,transform .15s}
+.pit{aspect-ratio:1;width:100%}
+.store{grid-row:1 / span 2;border-radius:999px;min-height:100%}
+.store.s2{grid-column:1}.store.s1{grid-column:8}
+.pit.top{grid-row:1}.pit.bot{grid-row:2}
+.pit.legal{cursor:pointer;box-shadow:inset 0 4px 10px rgba(0,0,0,.65),0 0 0 2px var(--ring),0 0 18px -4px var(--ring)}
+.pit.legal:hover{transform:translateY(-2px)}
+.pit:disabled{cursor:default}
+.p1c{--ring:rgba(56,189,248,.85)}.p2c{--ring:rgba(251,191,36,.85)}
+.pit.last,.store.last{box-shadow:inset 0 4px 10px rgba(0,0,0,.65),0 0 0 2px #fff,0 0 22px -2px rgba(255,255,255,.7)}
+.pit.cap{animation:capf .7s}
+@keyframes capf{30%{box-shadow:inset 0 4px 10px rgba(0,0,0,.65),0 0 0 3px #fb7185,0 0 26px #fb7185}}
+.stones{position:absolute;inset:12%;pointer-events:none}
+.store .stones{inset:8% 14%}
+.st{position:absolute;width:var(--sz,26%);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);box-shadow:inset -2px -3px 4px rgba(0,0,0,.35),inset 2px 2px 3px rgba(255,255,255,.45),0 1px 2px rgba(0,0,0,.5)}
+.store .st{--sz:22%}
+.cnt{position:absolute;left:50%;transform:translateX(-50%);bottom:-2px;min-width:1.5em;padding:0 .3em;border-radius:999px;font:800 clamp(.62rem,1.8vw,.8rem)/1.45 var(--font);font-variant-numeric:tabular-nums;color:#0a0b14;background:rgba(255,255,255,.85);pointer-events:none}
+.pit.top .cnt{bottom:auto;top:-2px}
+.store .cnt{bottom:6%;font-size:clamp(.8rem,2.4vw,1.05rem)}
+.store.s2 .cnt{bottom:auto;top:6%}
+.s1 .cnt{background:#7dd3fc}.s2 .cnt{background:#fde68a}
+.rowlab{display:flex;justify-content:space-between;width:100%;max-width:640px;margin:.35rem 0;font:600 .7rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.rowlab .p1t{color:var(--p1)}.rowlab .p2t{color:var(--p2)}
+@media (max-width:860px){.layout{grid-template-columns:1fr}.side{display:contents}}
+@media (max-width:640px){
+  .top{padding:.7rem .9rem .4rem;gap:.55rem}
+  .title{order:-1;flex-basis:100%}
+  .actions{margin-left:auto}
+  .wrap{padding:.3rem .9rem 2rem}
+  .btn{padding:.55rem .8rem;font-size:.88rem}
+  .stage{padding:.6rem .45rem}.panel{padding:.75rem}
+  .bar{gap:.4rem}
+  .team{padding:.35rem .35rem;gap:.35rem}.team .sw{min-width:30px;height:30px;font-size:1rem;border-radius:8px}
+  .team .nm{font-size:.84rem;white-space:nowrap;overflow-wrap:normal}.team .role{font-size:.66rem}
+  .pill{min-width:0;max-width:6.6rem;padding:.3rem .45rem}.pill b{font-size:.8rem;white-space:normal;line-height:1.15}.pill small{white-space:normal}
+  .opt .seg button{padding:.36rem .55rem}
+  .st{--sz:34%}.stones{inset:8%}
+}
+@media (max-width:380px){.bar{gap:.3rem}.team{padding:.35rem;gap:.3rem}.team .sw{min-width:30px;height:30px;font-size:1rem}.pill{padding:.3rem .35rem}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="home" href="/" aria-label="Back to scottsummers.github.io">← Home</a>
+  <h1 class="title"><i aria-hidden="true"></i>Mancala <span class="sub">Sow and capture</span></h1>
+  <div class="actions">
+    <button class="btn" id="helpBtn" type="button">How to play</button>
+    <button class="btn" id="newBtn" type="button">New game</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="layout">
+    <section class="stage glass" aria-label="Mancala">
+      <div class="bar" id="bar">
+        <div class="team p1" id="t1"><div class="sw" id="s1">0</div><div class="meta"><span class="nm">Blue</span><span class="role" id="role1">You</span></div></div>
+        <div class="pill" id="pill" aria-live="polite"><b id="turnTxt">Your turn</b><small id="stepTxt">pick a pit</small></div>
+        <div class="team p2" id="t2"><div class="sw" id="s2">0</div><div class="meta"><span class="nm">Gold</span><span class="role" id="role2">Computer</span></div></div>
+      </div>
+      <div class="rowlab"><span class="p2t">← Gold sows this way</span><span class="p2t">Gold's row</span></div>
+      <div class="board-wrap">
+        <div class="mboard" id="board" role="group" aria-label="Mancala board"></div>
+        <div class="overlay" id="ov" hidden>
+          <div>
+            <div id="ovBadge"></div>
+            <h2 id="ovTitle">You win!</h2>
+            <div class="big" id="ovScore">25 – 23</div>
+            <p class="muted" id="ovText" style="max-width:22rem;margin:.4rem auto 1rem"></p>
+            <div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap">
+              <button class="btn primary" id="againBtn" type="button">Play again →</button>
+              <button class="btn" id="peekBtn" type="button">See the board</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="rowlab"><span class="p1t">Blue's row</span><span class="p1t">Blue sows this way →</span></div>
+      <div class="under" id="under"></div>
+    </section>
+
+    <aside class="side">
+      <section class="panel glass p-opts">
+        <h3>Setup</h3>
+        <div class="opt"><label>Players</label><div class="seg" role="group" aria-label="Players" id="vsSeg"><button type="button" data-v="ai">vs computer</button><button type="button" data-v="2p">2 players</button></div></div>
+        <div class="opt" id="aiRow"><label>Computer level</label><div class="seg" role="group" aria-label="Computer level" id="aiSeg"><button type="button" data-v="easy">Easy</button><button type="button" data-v="normal">Normal</button><button type="button" data-v="hard">Hard</button></div></div>
+        <div class="opt"><label>Stones per pit</label><div class="seg" role="group" aria-label="Stones per pit" id="seedSeg"><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button></div></div>
+        <div class="opt"><label>Speed</label><div class="seg" role="group" aria-label="Sowing speed" id="spdSeg"><button type="button" data-v="slow">Slow</button><button type="button" data-v="normal">Normal</button><button type="button" data-v="fast">Fast</button></div></div>
+        <p class="small">Changing players, level or stones starts a new game.</p>
+      </section>
+      <section class="panel glass p-stats">
+        <h3 id="recTitle">Record · vs computer (Normal)</h3>
+        <dl class="stats">
+          <div class="stat hi"><dt id="r1t">Wins</dt><dd id="r1">0</dd></div>
+          <div class="stat"><dt id="r2t">Losses</dt><dd id="r2">0</dd></div>
+          <div class="stat"><dt id="r3t">Ties</dt><dd id="r3">0</dd></div>
+        </dl>
+        <p class="small"><b style="color:var(--text)">Tip:</b> count the stones. A pit that's exactly the right distance from your store lands in it and gives you another turn, so play those first.</p>
+      </section>
+    </aside>
+  </div>
+  <p class="hint">Tap or click one of your pits · Keys: <span class="kbd">1</span>–<span class="kbd">6</span> pick a pit (left to right) · <span class="kbd">N</span> new game</p>
+</main>
+
+<dialog id="help" aria-labelledby="helpTitle">
+  <h2 id="helpTitle">How to play <span>Mancala</span></h2>
+  <ul>
+    <li>Each player owns the <b>six pits on their side</b> and the big <b>store</b> on their right. Blue is the bottom row, Gold the top.</li>
+    <li>On your turn, pick one of your pits. All its stones are <b>sown one at a time</b> into the next pits, going counterclockwise. You drop stones in your own store but skip your opponent's.</li>
+    <li>If your last stone lands <b>in your store</b>, you <b>go again</b>.</li>
+    <li>If your last stone lands in an <b>empty pit on your side</b>, you <b>capture</b> it plus every stone in the pit straight across.</li>
+    <li>When one side runs out of stones, the game ends and the other player keeps what's left on their side. <b>Most stones in your store wins.</b></li>
+  </ul>
+  <button class="btn primary" data-close type="button">Got it, let's play</button>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var store={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function openHelp(){var d=$('#help');if(d.open)return;if(typeof d.showModal==='function')d.showModal();else d.setAttribute('open','')}
+function closeHelp(){var d=$('#help');if(typeof d.close==='function')d.close();else d.removeAttribute('open')}
+function helpOpen(){var d=$('#help');return d&&d.open}
+function setupHelp(key){$('#helpBtn').addEventListener('click',openHelp);$('#help [data-close]').addEventListener('click',closeHelp);$('#help').addEventListener('click',function(e){if(e.target===this)closeHelp()});if(!store.get(key+':seenHelp',false)){store.set(key+':seenHelp',true);openHelp()}}
+var _tt;function toast(m,ms){var t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(_tt);_tt=setTimeout(function(){t.classList.remove('show')},ms||1800)}
+
+var KEY='mancala';
+var S0=6,S1=13; // stores: Blue (side 0) pits 0-5, store 6; Gold (side 1) pits 7-12, store 13
+var NAMES=['Blue','Gold'];
+var opts={vs:store.get(KEY+':vs','ai'),ai:store.get(KEY+':ai','normal'),seeds:store.get(KEY+':seeds',4),spd:store.get(KEY+':spd','normal')};
+var G=null,busy=false,token=0,starter=store.get(KEY+':starter',0);
+
+function pitsOf(s){return s===0?[0,1,2,3,4,5]:[7,8,9,10,11,12]}
+function storeOf(s){return s===0?S0:S1}
+function legal(b,s){return pitsOf(s).filter(function(i){return b[i]>0})}
+// Pure move. Returns {b,extra,cap,last,over}. If snaps given, pushes intermediate boards.
+function doMove(b0,s,i,snaps){
+  var b=b0.slice(),n=b[i],pos=i,opp=storeOf(1-s),own=storeOf(s),cap=-1;
+  b[i]=0;if(snaps)snaps.push({b:b.slice(),at:i});
+  while(n>0){pos=(pos+1)%14;if(pos===opp)continue;b[pos]++;n--;if(snaps)snaps.push({b:b.slice(),at:pos})}
+  var extra=pos===own;
+  if(!extra&&pitsOf(s).indexOf(pos)>=0&&b[pos]===1&&b[12-pos]>0){cap=12-pos;b[own]+=b[pos]+b[cap];b[pos]=0;b[cap]=0}
+  var over=false;
+  if(legal(b,0).length===0||legal(b,1).length===0){
+    over=true;for(var k=0;k<6;k++){b[S0]+=b[k];b[k]=0;b[S1]+=b[7+k];b[7+k]=0}
+  }
+  return {b:b,extra:extra&&!over,cap:cap,last:pos,over:over};
+}
+// Computer
+function evalB(b,s){return (b[storeOf(s)]-b[storeOf(1-s)])}
+function search(b,turn,me,depth,a,bt){
+  var mv=legal(b,turn);
+  if(depth===0||mv.length===0)return evalB(b,me);
+  var best=turn===me?-1e9:1e9;
+  for(var k=0;k<mv.length;k++){
+    var r=doMove(b,turn,mv[k]);var v;
+    if(r.over)v=evalB(r.b,me)*100;
+    else v=search(r.b,r.extra?turn:1-turn,me,depth-1,a,bt);
+    if(turn===me){if(v>best)best=v;if(best>a)a=best}else{if(v<best)best=v;if(best<bt)bt=best}
+    if(a>=bt)break;
+  }
+  return best;
+}
+function aiPick(b,s,level){
+  var mv=legal(b,s);
+  if(level==='easy'&&Math.random()<0.55)return mv[Math.floor(Math.random()*mv.length)];
+  var depth=level==='easy'?1:level==='normal'?3:8;
+  var best=-1e9,pick=[];
+  mv.forEach(function(i){var r=doMove(b,s,i);var v=r.over?evalB(r.b,s)*100:search(r.b,r.extra?s:1-s,s,depth-1,-1e9,1e9);
+    if(v>best){best=v;pick=[i]}else if(v===best)pick.push(i)});
+  return pick[Math.floor(Math.random()*pick.length)];
+}
+// Board UI
+var els=[];
+function buildBoard(){
+  var bd=$('#board');bd.innerHTML='';els=[];
+  for(var i=0;i<14;i++){
+    var e;
+    if(i===S0||i===S1){e=document.createElement('div');e.className='store '+(i===S0?'s1 p1c':'s2 p2c');e.setAttribute('aria-label',(i===S0?'Blue':'Gold')+' store')}
+    else{e=document.createElement('button');e.type='button';var s=i<6?0:1;e.className='pit '+(s===0?'bot p1c':'top p2c');e.dataset.i=i;
+      e.style.gridColumn=s===0?(i+2):(14-i);e.addEventListener('click',onPit)}
+    e.innerHTML='<div class="stones"></div><span class="cnt">0</span>';
+    bd.appendChild(e);els[i]=e;
+  }
+}
+var COLORS=['#38bdf8','#fbbf24','#f472b6','#34d399','#a78bfa','#fb923c','#e2e8f0'];
+function spot(k,isStore){ // deterministic scatter
+  var a=k*2.39996,r=Math.sqrt(k+.5)/Math.sqrt(isStore?30:14)*(isStore?.44:.42);
+  var x=50+Math.cos(a)*r*100*(isStore?.8:1),y=50+Math.sin(a)*r*100*(isStore?1.6:1);
+  return [Math.max(12,Math.min(88,x)),Math.max(10,Math.min(90,y))];
+}
+function render(b){
+  for(var i=0;i<14;i++){
+    var e=els[i],n=b[i],isS=(i===S0||i===S1),max=isS?30:14,box=e.firstChild,h='';
+    for(var k=0;k<Math.min(n,max);k++){var p=spot(k,isS);h+='<i class="st" style="left:'+p[0].toFixed(1)+'%;top:'+p[1].toFixed(1)+'%;background:'+COLORS[(k*5+i)%COLORS.length]+'"></i>'}
+    if(box.innerHTML!==h)box.innerHTML=h;
+    e.lastChild.textContent=n;
+    if(!isS)e.setAttribute('aria-label',(i<6?'Blue':'Gold')+' pit '+(i<6?i+1:13-i)+', '+n+' stone'+(n===1?'':'s'));
+  }
+  $('#s1').textContent=b[S0];$('#s2').textContent=b[S1];
+}
+function isHuman(s){return opts.vs==='2p'||s===0}
+function setLegal(){
+  var mv=(!G.over&&!busy&&isHuman(G.turn))?legal(G.b,G.turn):[];
+  for(var i=0;i<14;i++){if(i===S0||i===S1)continue;var ok=mv.indexOf(i)>=0;els[i].classList.toggle('legal',ok);els[i].disabled=!ok}
+}
+function status(main,sub,again){
+  $('#turnTxt').textContent=main;$('#stepTxt').textContent=sub||'';
+  var p=$('#pill');p.classList.remove('again');if(again){void p.offsetWidth;p.classList.add('again')}
+  $('#t1').classList.toggle('on',!G.over&&G.turn===0);$('#t2').classList.toggle('on',!G.over&&G.turn===1);
+}
+function turnLabel(){
+  if(opts.vs==='ai')return G.turn===0?'Your turn':'Computer';
+  return NAMES[G.turn]+"'s turn";
+}
+function delay(){return window.__fast?0:({slow:300,normal:170,fast:70})[opts.spd]||170}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+async function play(i){
+  var my=token,s=G.turn,snaps=[];busy=true;setLegal();
+  var r=doMove(G.b,s,i,snaps);
+  $$('.last').forEach(function(e){e.classList.remove('last')});
+  for(var k=0;k<snaps.length;k++){
+    render(snaps[k].b);$$('.last').forEach(function(e){e.classList.remove('last')});if(k>0)els[snaps[k].at].classList.add('last');
+    var d=delay();if(d)await sleep(d);if(my!==token)return;
+  }
+  if(r.cap>=0){els[r.cap].classList.remove('cap');void els[r.cap].offsetWidth;els[r.cap].classList.add('cap');
+    toast((opts.vs==='ai'?(s===0?'You':'Computer'):NAMES[s])+' captured '+(G.b[r.cap]+1)+' stones!',1500)}
+  G.b=r.b;G.moves++;render(G.b);
+  if(r.over){busy=false;finish();return}
+  if(r.extra){status(turnLabel(),'landed in the store, go again',true)}
+  else{G.turn=1-s;status(turnLabel(),isHuman(G.turn)?'pick a pit':'thinking…')}
+  busy=false;setLegal();
+  if(!isHuman(G.turn))aiTurn();
+}
+async function aiTurn(){
+  var my=token;busy=true;setLegal();
+  status('Computer',G.extraMsg||'thinking…');
+  await sleep(window.__fast?0:(opts.spd==='fast'?250:550));if(my!==token)return;
+  busy=false;
+  var i=aiPick(G.b,1,opts.ai);play(i);
+}
+function onPit(e){
+  var i=+e.currentTarget.dataset.i;
+  if(busy||G.over||!isHuman(G.turn)||legal(G.b,G.turn).indexOf(i)<0)return;
+  play(i);
+}
+function recKey(){return KEY+':rec:'+(opts.vs==='ai'?'ai-'+opts.ai:'2p')}
+function showRec(){
+  var r=store.get(recKey(),[0,0,0]);
+  if(opts.vs==='ai'){$('#recTitle').textContent='Record · vs computer ('+opts.ai[0].toUpperCase()+opts.ai.slice(1)+')';$('#r1t').textContent='Wins';$('#r2t').textContent='Losses'}
+  else{$('#recTitle').textContent='Record · 2 players';$('#r1t').textContent='Blue wins';$('#r2t').textContent='Gold wins'}
+  $('#r3t').textContent='Ties';$('#r1').textContent=r[0];$('#r2').textContent=r[1];$('#r3').textContent=r[2];
+}
+function finish(){
+  G.over=true;setLegal();
+  var a=G.b[S0],c=G.b[S1],w=a>c?0:c>a?1:-1;
+  var r=store.get(recKey(),[0,0,0]);r[w===0?0:w===1?1:2]++;store.set(recKey(),r);showRec();
+  var title,text;
+  if(opts.vs==='ai'){title=w===0?'You win!':w===1?'Computer wins':'It\'s a tie!';
+    text=w===0?'Nice sowing. Try a harder level next.':w===1?'The computer got there this time. Look for extra turns and captures.':'Dead even. Play again to break the tie.'}
+  else{title=w<0?'It\'s a tie!':NAMES[w]+' wins!';text=w<0?'Dead even.':'Most stones in the store takes it.'}
+  $('#ovBadge').innerHTML='<span class="badge">'+(w<0?'Tie game':'Game over')+'</span>';
+  $('#ovTitle').textContent=title;$('#ovScore').textContent=a+' – '+c;$('#ovText').textContent=text+' (Blue '+a+', Gold '+c+')';
+  $('#ov').hidden=false;status('Game over',w<0?'tie':NAMES[w]+' wins');
+  window.__result={blue:a,gold:c,winner:w,moves:G.moves};
+}
+function newGame(){
+  token++;busy=false;$('#ov').hidden=true;$('#under').innerHTML='';window.__result=null;
+  var b=[];for(var i=0;i<14;i++)b[i]=(i===S0||i===S1)?0:+opts.seeds;
+  G={b:b,turn:starter,over:false,moves:0};
+  starter=1-starter;store.set(KEY+':starter',starter);
+  $('#role1').textContent=opts.vs==='ai'?'You':'Player 1';$('#role2').textContent=opts.vs==='ai'?'Computer':'Player 2';
+  $('#aiRow').hidden=opts.vs!=='ai';
+  $$('.last,.cap').forEach(function(e){e.classList.remove('last','cap')});
+  render(G.b);showRec();
+  status(turnLabel(),isHuman(G.turn)?(G.turn===0&&opts.vs==='ai'?'you start, pick a pit':'pick a pit'):'thinking…');
+  setLegal();
+  if(!isHuman(G.turn))aiTurn();
+}
+function seg(id,key,restart){
+  var el=$(id);
+  function sync(){$$('button',el).forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.v===String(opts[key])))})}
+  el.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var v=b.dataset.v;if(key==='seeds')v=+v;if(opts[key]===v)return;opts[key]=v;store.set(KEY+':'+key,v);sync();if(restart)newGame()});
+  sync();
+}
+seg('#vsSeg','vs',true);seg('#aiSeg','ai',true);seg('#seedSeg','seeds',true);seg('#spdSeg','spd',false);
+$('#newBtn').addEventListener('click',newGame);
+$('#againBtn').addEventListener('click',newGame);
+$('#peekBtn').addEventListener('click',function(){$('#ov').hidden=true;$('#under').innerHTML='<button class="btn primary" type="button" id="again2">Play again →</button>';$('#again2').addEventListener('click',function(){$('#under').innerHTML='';newGame()})});
+document.addEventListener('keydown',function(e){
+  if(helpOpen()||e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.key==='n'||e.key==='N'){newGame();return}
+  var d=parseInt(e.key,10);
+  if(d>=1&&d<=6&&!busy&&G&&!G.over&&isHuman(G.turn)){var i=G.turn===0?d-1:13-d;if(G.b[i]>0)play(i)}
+});
+buildBoard();setupHelp(KEY);newGame();
+window.__mancala={doMove:doMove,legal:legal,aiPick:aiPick,state:function(){return G},busy:function(){return busy},play:function(i){return play(i)}};
+</script>
+</body>
+</html>
