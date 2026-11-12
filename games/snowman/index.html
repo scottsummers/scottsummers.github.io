@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snowman · Scott Summers</title>
+<meta name="description" content="Snowman: a friendly guess-the-word game. Pick letters to spell the secret word before the sun melts your snowman. Six categories, three difficulty levels, and a 2-player mode where a friend picks the word. Works offline, no sign-in.">
+<meta name="theme-color" content="#07080f">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23101324'/%3E%3Ccircle cx='16' cy='22' r='7' fill='%23f1f5ff'/%3E%3Ccircle cx='16' cy='11' r='5' fill='%23f1f5ff'/%3E%3Cpath d='M16 11l5 1-5 1z' fill='%23fb923c'/%3E%3Crect x='11' y='4' width='10' height='3' rx='1' fill='%2338bdf8'/%3E%3C/svg%3E">
+<style>
+:root{--acc:#7dd3fc;--acc2:#c4b5fd}
+:root{--bg:#07080f;--text:#eef0f7;--muted:#a9b0c6;--faint:#7d859e;--line:rgba(255,255,255,.10);--line-hi:rgba(255,255,255,.22);--glass:rgba(255,255,255,.05);--font:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;--mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;--acc-glow:color-mix(in srgb,var(--acc) 26%,transparent);--acc2-glow:color-mix(in srgb,var(--acc2) 22%,transparent)}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font:16px/1.5 var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(900px 520px at 12% -12%,var(--acc-glow),transparent 62%),radial-gradient(800px 600px at 105% 110%,var(--acc2-glow),transparent 60%),radial-gradient(1200px 700px at 50% -20%,#141a3a,var(--bg) 62%)}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;opacity:.28;-webkit-mask-image:radial-gradient(ellipse 70% 55% at 50% 10%,#000 15%,transparent 75%);mask-image:radial-gradient(ellipse 70% 55% at 50% 10%,#000 15%,transparent 75%)}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.top{max-width:1000px;margin:0 auto;padding:.9rem 1.2rem .6rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.home{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem .85rem;border-radius:999px;border:1px solid var(--line-hi);background:var(--glass);color:var(--muted);text-decoration:none;font-size:.88rem;font-weight:600;transition:color .2s,background .2s}
+.home:hover{color:var(--text);background:rgba(255,255,255,.09)}
+.title{display:flex;align-items:center;gap:.6rem;margin:0;flex:1;min-width:0;font:800 clamp(1.25rem,3vw,1.7rem)/1.1 var(--font);letter-spacing:-.03em}
+.title i{flex:none;width:13px;height:13px;border-radius:4px;background:linear-gradient(135deg,var(--acc),var(--acc2));box-shadow:0 0 18px var(--acc)}
+.title .sub{font-weight:600;font-size:.62em;color:var(--muted);letter-spacing:0;white-space:nowrap}
+.actions{display:flex;gap:.5rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.6rem 1rem;border-radius:12px;border:1px solid var(--line-hi);background:var(--glass);font-weight:600;font-size:.93rem;line-height:1.2;transition:transform .15s,background .2s,border-color .2s,box-shadow .2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.btn:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.35)}
+.btn:active{transform:scale(.97)}
+.btn.primary{color:#0a0b14;border-color:transparent;background:linear-gradient(110deg,var(--acc),var(--acc2));box-shadow:0 10px 26px -12px var(--acc)}
+.btn.primary:hover{box-shadow:0 14px 32px -12px var(--acc);filter:brightness(1.06)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.wrap{max-width:1000px;margin:0 auto;padding:.4rem 1.2rem 2.5rem}
+.glass{background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:20px;-webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 20px 50px -30px rgba(0,0,0,.8)}
+.seg{display:inline-flex;padding:.25rem;gap:.2rem;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25)}
+.seg button{border:0;background:transparent;padding:.45rem .85rem;border-radius:9px;color:var(--muted);font-weight:600;font-size:.88rem;white-space:nowrap}
+.seg button[aria-pressed="true"]{color:#0a0b14;background:linear-gradient(110deg,var(--acc),var(--acc2))}
+.seg button:not([aria-pressed="true"]):hover{color:var(--text);background:rgba(255,255,255,.07)}
+.muted{color:var(--muted)}
+.kbd{font:600 .74rem var(--mono);padding:.08rem .4rem;border-radius:6px;border:1px solid var(--line-hi);background:rgba(255,255,255,.06);color:var(--text)}
+.hint{margin:.9rem 0 0;color:var(--faint);font-size:.84rem;text-align:center}
+dialog{max-width:min(540px,calc(100vw - 2rem));padding:1.5rem 1.5rem 1.3rem;color:var(--text);border:1px solid var(--line-hi);border-radius:20px;background:linear-gradient(160deg,#171a2c,#0d0f1c);box-shadow:0 30px 80px -20px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.03)}
+dialog::backdrop{background:rgba(4,5,12,.7);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+dialog h2{margin:0 0 .6rem;font:800 1.35rem var(--font);letter-spacing:-.02em}
+dialog h2 span{background:linear-gradient(110deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+dialog ul{margin:.4rem 0 1.1rem;padding-left:1.15rem;color:var(--muted);font-size:.94rem}
+dialog li{margin:.32rem 0}
+dialog li b{color:var(--text)}
+dialog .btn{width:100%}
+[hidden]{display:none!important}
+.toast{position:fixed;left:50%;bottom:1.4rem;z-index:30;transform:translate(-50%,160%);opacity:0;visibility:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .25s,visibility .35s;padding:.7rem 1.1rem;border-radius:14px;border:1px solid var(--line-hi);background:rgba(16,18,32,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-weight:600;box-shadow:0 16px 40px -16px rgba(0,0,0,.9);pointer-events:none;max-width:calc(100vw - 2rem);text-align:center}
+.toast.show{transform:translate(-50%,0);opacity:1;visibility:visible}
+.overlay{position:absolute;inset:0;z-index:5;display:grid;place-items:center;padding:1rem;border-radius:18px;background:rgba(7,8,15,.76);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);text-align:center;animation:fade .3s both}
+.overlay[hidden]{display:none}
+.overlay h2{margin:0 0 .3rem;font:800 clamp(1.5rem,4vw,2.1rem) var(--font);letter-spacing:-.03em}
+.overlay .big{font:800 clamp(2.4rem,7vw,3.4rem)/1 var(--font);background:linear-gradient(110deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent;margin:.3rem 0}
+.badge{display:inline-block;margin:.3rem 0 .6rem;padding:.2rem .7rem;border-radius:999px;font:700 .75rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#0a0b14;background:linear-gradient(110deg,var(--acc),var(--acc2))}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:40}
+.side{display:flex;flex-direction:column;gap:1rem}
+.panel{padding:1rem}
+.panel h3{margin:0 0 .7rem;font:750 .95rem var(--font)}
+.opt{margin:0 0 .75rem}
+.opt label{display:block;font:600 .68rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:.3rem}
+.opt .seg{flex-wrap:wrap}
+.opt .seg button{padding:.45rem .75rem}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:0;padding:0}
+.stat{margin:0;padding:.5rem .7rem;border-radius:13px;border:1px solid var(--line);background:rgba(255,255,255,.035);min-width:0}
+.stat dt{font:600 .62rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.stat dd{margin:.1rem 0 0;font:750 1.2rem/1.2 var(--font);font-variant-numeric:tabular-nums}
+.stat.hi dd{color:var(--acc)}
+.small{font-size:.82rem;color:var(--muted);margin:.6rem 0 0;line-height:1.45}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:1.1rem;align-items:start}
+.stage{position:relative;padding:1rem;display:flex;flex-direction:column;align-items:center;min-width:0}
+.info{width:100%;max-width:560px;display:flex;justify-content:space-between;align-items:center;gap:.6rem;margin-bottom:.4rem;flex-wrap:wrap}
+.cat{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:999px;border:1px solid var(--line-hi);background:rgba(255,255,255,.04);font:700 .78rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--acc)}
+.lives{font:700 .82rem var(--mono);color:var(--muted)}
+.lives b{color:var(--text)}
+.scene{position:relative;width:100%;max-width:340px;aspect-ratio:200/190;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,#0c1430,#18234a 70%,#1d2b55);transition:background 1s}
+.scene svg{display:block;width:100%;height:100%}
+.scene .part{transition:opacity .7s,transform .9s cubic-bezier(.4,.1,.6,1);transform-box:fill-box;transform-origin:center}
+.scene .part.gone{opacity:0;transform:translateY(26px) scale(.6)}
+.scene #sun{transition:transform 1s cubic-bezier(.2,.8,.2,1)}
+.scene #puddle{transition:opacity .8s,transform .8s;transform-box:fill-box;transform-origin:center}
+.word{display:flex;flex-wrap:wrap;justify-content:center;gap:.4rem;margin:1rem 0 .3rem;min-height:3rem;max-width:100%}
+.slot{width:clamp(1.7rem,7.2vw,2.5rem);height:clamp(2.3rem,9vw,3rem);display:grid;place-items:center;border-bottom:3px solid var(--line-hi);font:800 clamp(1.2rem,5vw,1.8rem)/1 var(--font);text-transform:uppercase;color:var(--text)}
+.slot.show{border-color:var(--acc);animation:pop .35s}
+.slot.miss{color:#fda4af;border-color:#fb7185}
+@keyframes pop{40%{transform:scale(1.15)}}
+.msg{min-height:1.4rem;margin:.2rem 0 .7rem;color:var(--muted);font-size:.9rem;text-align:center}
+.keys{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.4rem;width:100%;max-width:520px}
+.key{border:1px solid var(--line-hi);background:rgba(255,255,255,.06);border-radius:11px;padding:0;height:46px;font:800 1.1rem var(--font);text-transform:uppercase;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:background .2s,transform .1s,opacity .2s}
+.key:hover:not(:disabled){background:rgba(255,255,255,.12)}
+.key:active:not(:disabled){transform:scale(.94)}
+.key.hit{background:linear-gradient(140deg,#7dd3fc,#38bdf8);color:#0a0b14;border-color:transparent;opacity:.9}
+.key.no{background:rgba(251,113,133,.14);border-color:rgba(251,113,133,.35);color:#fda4af;opacity:.55}
+.key:disabled{cursor:default}
+.row2{display:flex;gap:.5rem;justify-content:center;margin-top:.8rem;flex-wrap:wrap}
+.shake{animation:shake .4s}
+.overlay .word{margin:.4rem 0 .6rem}
+dialog label.f{display:block;font:600 .7rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin:.7rem 0 .3rem}
+dialog input{width:100%;padding:.65rem .8rem;border-radius:12px;border:1px solid var(--line-hi);background:rgba(0,0,0,.35);color:var(--text);font:600 1.05rem var(--font)}
+dialog .err{color:#fda4af;font-size:.85rem;min-height:1.2rem;margin:.4rem 0 .6rem}
+@media (max-width:860px){.layout{grid-template-columns:1fr}.side{display:contents}}
+@media (max-width:640px){
+  .top{padding:.7rem .9rem .4rem;gap:.55rem}
+  .title{order:-1;flex-basis:100%}
+  .actions{margin-left:auto}
+  .wrap{padding:.3rem .9rem 2rem}
+  .btn{padding:.55rem .8rem;font-size:.88rem}
+  .stage{padding:.7rem .5rem}.panel{padding:.75rem}
+  .scene{max-width:250px}
+  .keys{gap:.32rem}.key{height:44px;font-size:1rem}
+  .opt .seg button{padding:.36rem .55rem}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="home" href="/" aria-label="Back to scottsummers.github.io">← Home</a>
+  <h1 class="title"><i aria-hidden="true"></i>Snowman <span class="sub">Guess the word</span></h1>
+  <div class="actions">
+    <button class="btn" id="helpBtn" type="button">How to play</button>
+    <button class="btn" id="newBtn" type="button">New word</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="layout">
+    <section class="stage glass" aria-label="Snowman">
+      <div class="info"><span class="cat" id="catTxt">Animals</span><span class="lives" id="livesTxt">Misses left: <b>6</b></span></div>
+      <div class="scene" id="scene">
+        <svg viewBox="0 0 200 190" aria-hidden="true">
+          <g id="sun"><circle cx="168" cy="40" r="17" fill="#fde047"/><g stroke="#fde047" stroke-width="3" stroke-linecap="round"><path d="M168 14v-6M168 66v6M142 40h-6M194 40h6M150 22l-4-4M186 58l4 4M186 22l4-4M150 58l-4 4"/></g></g>
+          <g fill="#fff" opacity=".7"><circle cx="22" cy="24" r="1.6"/><circle cx="60" cy="14" r="1.2"/><circle cx="104" cy="30" r="1.4"/><circle cx="36" cy="60" r="1.1"/><circle cx="130" cy="12" r="1.2"/></g>
+          <path d="M0 160 Q50 146 100 154 T200 150 V190 H0Z" fill="#e8eefc"/>
+          <ellipse id="puddle" cx="100" cy="166" rx="46" ry="8" fill="#93c5fd" opacity="0"/>
+          <g class="part" data-p="7"><circle cx="100" cy="134" r="30" fill="#f1f5ff"/><circle cx="100" cy="100" r="22" fill="#f1f5ff"/></g>
+          <g class="part" data-p="6"><circle cx="100" cy="68" r="16" fill="#f1f5ff"/></g>
+          <g class="part" data-p="5"><circle cx="94" cy="64" r="2.2" fill="#1e293b"/><circle cx="106" cy="64" r="2.2" fill="#1e293b"/><path d="M93 73 q7 5 14 0" stroke="#1e293b" stroke-width="2" fill="none" stroke-linecap="round"/></g>
+          <g class="part" data-p="4"><path d="M100 67 L118 70 L100 72Z" fill="#fb923c"/></g>
+          <g class="part" data-p="3"><circle cx="100" cy="94" r="2.6" fill="#1e293b"/><circle cx="100" cy="104" r="2.6" fill="#1e293b"/><circle cx="100" cy="126" r="2.8" fill="#1e293b"/></g>
+          <g class="part" data-p="2" stroke="#8b5a2b" stroke-width="3" stroke-linecap="round" fill="none"><path d="M80 98 L56 84 M62 88 l-6 -9"/><path d="M120 98 L144 84 M138 88 l6 -9"/></g>
+          <g class="part" data-p="1"><path d="M84 80 q16 8 32 0 l1 6 q-17 8 -34 0Z" fill="#f43f5e"/><path d="M108 84 l4 18 l-7 1 l-2 -16Z" fill="#e11d48"/></g>
+          <g class="part" data-p="0"><rect x="84" y="49" width="32" height="5" rx="2" fill="#0f172a"/><rect x="89" y="30" width="22" height="21" rx="2" fill="#0f172a"/><rect x="89" y="44" width="22" height="4" fill="#38bdf8"/></g>
+        </svg>
+      </div>
+      <div class="word" id="word" aria-live="polite" aria-label="Secret word"></div>
+      <p class="msg" id="msg" aria-live="polite">Pick a letter.</p>
+      <div class="keys" id="keys" role="group" aria-label="Letters"></div>
+      <div class="row2"><button class="btn" id="hintBtn" type="button">Hint (costs a miss)</button></div>
+      <div class="overlay" id="ov" hidden>
+        <div>
+          <div id="ovBadge"></div>
+          <h2 id="ovTitle">You saved him!</h2>
+          <div class="word" id="ovWord"></div>
+          <p class="muted" id="ovText" style="max-width:22rem;margin:.2rem auto 1rem"></p>
+          <div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap">
+            <button class="btn primary" id="againBtn" type="button">Next word →</button>
+            <button class="btn" id="peekBtn" type="button">See the board</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="side">
+      <section class="panel glass p-opts">
+        <h3>Setup</h3>
+        <div class="opt"><label>Players</label><div class="seg" role="group" aria-label="Players" id="modeSeg"><button type="button" data-v="solo">Solo</button><button type="button" data-v="2p">2 players</button></div></div>
+        <div class="opt"><label>Difficulty</label><div class="seg" role="group" aria-label="Difficulty" id="lvlSeg"><button type="button" data-v="easy">Easy</button><button type="button" data-v="normal">Normal</button><button type="button" data-v="hard">Hard</button></div></div>
+        <div class="opt" id="catRow"><label>Category</label><div class="seg" role="group" aria-label="Category" id="catSeg"><button type="button" data-v="mix">Mix</button><button type="button" data-v="animals">Animals</button><button type="button" data-v="food">Food</button><button type="button" data-v="nature">Nature</button><button type="button" data-v="space">Space</button><button type="button" data-v="sports">Sports</button><button type="button" data-v="school">School</button></div></div>
+        <p class="small" id="lvlNote"></p>
+      </section>
+      <section class="panel glass p-stats">
+        <h3 id="recTitle">Record · Normal</h3>
+        <dl class="stats">
+          <div class="stat hi"><dt>Saved</dt><dd id="r1">0</dd></div>
+          <div class="stat"><dt>Melted</dt><dd id="r2">0</dd></div>
+          <div class="stat"><dt>Streak</dt><dd id="r3">0</dd></div>
+        </dl>
+        <p class="small" id="bestTxt">Best streak: 0</p>
+        <p class="small"><b style="color:var(--text)">Tip:</b> start with vowels like E, A and O, then try common letters such as R, S, T, L and N.</p>
+      </section>
+    </aside>
+  </div>
+  <p class="hint">Tap or click a letter · Keys: <span class="kbd">A</span>–<span class="kbd">Z</span> guess · <span class="kbd">?</span> hint · <span class="kbd">Enter</span> next word</p>
+</main>
+
+<dialog id="help" aria-labelledby="helpTitle">
+  <h2 id="helpTitle">How to play <span>Snowman</span></h2>
+  <ul>
+    <li>There's a <b>secret word</b>. Each blank is one letter, and the category gives you a clue.</li>
+    <li>Pick a letter. If it's in the word, <b>every copy of it appears</b>.</li>
+    <li>If it isn't, the sun gets higher and <b>part of the snowman melts</b>.</li>
+    <li>Spell the whole word <b>before he melts</b> to save him. Easy gives you 8 misses, Normal 6, Hard 5 with longer words.</li>
+    <li><b>Hint</b> shows a letter but costs one miss. In <b>2 players</b>, one person types a secret word and hands the device over.</li>
+  </ul>
+  <button class="btn primary" data-close type="button">Got it, let's play</button>
+</dialog>
+<dialog id="setWord" aria-labelledby="swTitle">
+  <h2 id="swTitle">Pick a <span>secret word</span></h2>
+  <p class="muted" style="margin:0">Player 1: type a word while Player 2 looks away, then hand over the device.</p>
+  <form id="swForm" method="dialog">
+    <label class="f" for="swInput">Secret word (letters only, 3 to 12)</label>
+    <input id="swInput" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="12">
+    <label class="f" for="swClue">Clue (optional)</label>
+    <input id="swClue" type="text" autocomplete="off" maxlength="20" placeholder="e.g. a fruit">
+    <div class="err" id="swErr"></div>
+    <button class="btn primary" type="submit" id="swGo">Start guessing →</button>
+  </form>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var store={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+function openD(d){if(d.open)return;if(typeof d.showModal==='function')d.showModal();else d.setAttribute('open','')}
+function closeD(d){if(typeof d.close==='function')d.close();else d.removeAttribute('open')}
+var toastT;function toast(t){var el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){el.classList.remove('show')},1800)}
+
+var WORDS={
+ animals:"cat dog owl fox cow pig bee frog duck bear deer goat lion seal swan wolf zebra tiger horse sheep whale otter panda koala camel moose rabbit turtle parrot monkey donkey beaver jaguar penguin giraffe dolphin octopus hamster leopard raccoon kangaroo elephant flamingo squirrel hedgehog alligator butterfly chameleon",
+ food:"pie jam egg rice soup corn pear plum cake taco apple bread pizza mango lemon grape peach honey pasta cookie waffle cheese banana carrot muffin noodle pretzel popcorn pancake cupcake avocado sandwich broccoli meatball pineapple blueberry spaghetti strawberry",
+ nature:"sun sky sea ice rain snow wind leaf tree lake hill cloud river storm ocean beach stone frost flower forest canyon island meadow desert glacier volcano rainbow thunder mountain waterfall blizzard snowflake lightning sunflower",
+ space:"star moon mars orbit comet venus earth pluto rocket planet saturn galaxy meteor jupiter neptune gravity eclipse mercury asteroid astronaut telescope satellite universe spaceship",
+ sports:"ball golf swim race goal skate chess hockey soccer tennis karate rugby skiing bowling archery cycling fencing surfing baseball football swimming climbing badminton volleyball basketball gymnastics",
+ school:"pen map desk book quiz glue paper chalk ruler eraser pencil crayon folder recess teacher library science history backpack notebook scissors homework calendar alphabet computer dictionary"
+};
+for(var k in WORDS)WORDS[k]=WORDS[k].split(' ');
+var CATNAME={animals:'Animals',food:'Food',nature:'Nature',space:'Space',sports:'Sports',school:'School'};
+var LV={easy:{lives:8,min:3,max:5,note:'Easy: short words (3 to 5 letters) and 8 misses.'},normal:{lives:6,min:5,max:7,note:'Normal: 5 to 7 letters and 6 misses.'},hard:{lives:5,min:7,max:12,note:'Hard: long words (7+ letters), 5 misses and no hints.'}};
+var PARTS=8;
+var opts=store.get('snowman:opts',{mode:'solo',lvl:'normal',cat:'mix'});
+if(!LV[opts.lvl])opts.lvl='normal';
+var S=null,recent=store.get('snowman:recent',[]);
+window.__result=null;
+
+function pool(cat,lvl){var cats=cat==='mix'?Object.keys(WORDS):[cat],out=[];cats.forEach(function(c){WORDS[c].forEach(function(w){if(w.length>=LV[lvl].min&&w.length<=LV[lvl].max)out.push({w:w,c:c})})});return out}
+function pickWord(){var p=pool(opts.cat,opts.lvl);var fresh=p.filter(function(x){return recent.indexOf(x.w)<0});if(!fresh.length)fresh=p;var x=fresh[Math.floor(Math.random()*fresh.length)];recent.push(x.w);if(recent.length>40)recent=recent.slice(-40);store.set('snowman:recent',recent);return x}
+
+function start(word,clue){
+ $('#ov').hidden=true;
+ S={word:word.toLowerCase(),clue:clue,guessed:{},misses:0,lives:LV[opts.lvl].lives,over:false,hints:0};
+ window.__result=null;
+ $('#catTxt').textContent=clue;
+ buildKeys();render();
+ $('#msg').textContent=opts.mode==='2p'?'Player 2: pick a letter.':'Pick a letter.';
+}
+function newGame(){
+ if(opts.mode==='2p'){$('#swInput').value='';$('#swClue').value='';$('#swErr').textContent='';openD($('#setWord'));setTimeout(function(){$('#swInput').focus()},50);return}
+ var x=pickWord();start(x.w,CATNAME[x.c]);
+}
+function buildKeys(){var k=$('#keys');k.innerHTML='';'abcdefghijklmnopqrstuvwxyz'.split('').forEach(function(ch){var b=document.createElement('button');b.type='button';b.className='key';b.textContent=ch;b.dataset.k=ch;b.setAttribute('aria-label','Letter '+ch.toUpperCase());b.addEventListener('click',function(){guess(ch)});k.appendChild(b)})}
+function solved(){for(var i=0;i<S.word.length;i++)if(!S.guessed[S.word[i]])return false;return true}
+function render(){
+ var w=$('#word');w.innerHTML='';
+ for(var i=0;i<S.word.length;i++){var ch=S.word[i],d=document.createElement('span');d.className='slot';if(S.guessed[ch]){d.textContent=ch;d.classList.add('show')}else if(S.over){d.textContent=ch;d.classList.add('miss')}w.appendChild(d)}
+ w.setAttribute('aria-label','Secret word: '+S.word.split('').map(function(c){return S.guessed[c]?c.toUpperCase():'blank'}).join(' '));
+ var left=S.lives-S.misses;$('#livesTxt').innerHTML='Misses left: <b>'+left+'</b>';
+ var gone=Math.round(PARTS*S.misses/S.lives);
+ $$('.scene .part').forEach(function(g){g.classList.toggle('gone',+g.dataset.p<gone)});
+ var f=S.misses/S.lives;
+ $('#sun').style.transform='translate('+(-12*f)+'px,'+(105-95*f)+'px)';
+ $('#scene').style.background='linear-gradient(180deg,'+mix([12,20,48],[56,140,220],f)+','+mix([24,35,74],[253,186,116],f)+' 70%,'+mix([29,43,85],[254,215,170],f)+')';
+ var pd=$('#puddle');pd.style.opacity=Math.min(1,f*1.1);
+ $$('.key').forEach(function(b){var ch=b.dataset.k;b.classList.remove('hit','no');if(S.guessed[ch]){b.classList.add(S.word.indexOf(ch)>=0?'hit':'no');b.disabled=true}else b.disabled=S.over});
+ var hb=$('#hintBtn');hb.hidden=opts.lvl==='hard';hb.disabled=S.over||left<=1;
+}
+function mix(a,b,f){return 'rgb('+a.map(function(v,i){return Math.round(v+(b[i]-v)*f)}).join(',')+')'}
+function guess(ch){
+ if(!S||S.over||S.guessed[ch]||anyDialog())return;
+ S.guessed[ch]=true;
+ if(S.word.indexOf(ch)>=0){var n=S.word.split(ch).length-1;$('#msg').textContent=n>1?'Yes! There are '+n+' '+ch.toUpperCase()+'s.':'Yes! There is one '+ch.toUpperCase()+'.'}
+ else{S.misses++;$('#msg').textContent='No '+ch.toUpperCase()+'. The snowman is melting!';var sc=$('#scene');sc.classList.remove('shake');void sc.offsetWidth;sc.classList.add('shake')}
+ check();
+}
+function hint(){
+ if(!S||S.over||opts.lvl==='hard'||S.lives-S.misses<=1||anyDialog())return;
+ var hidden=S.word.split('').filter(function(c){return !S.guessed[c]});if(!hidden.length)return;
+ var ch=hidden[Math.floor(Math.random()*hidden.length)];S.guessed[ch]=true;S.misses++;S.hints++;
+ $('#msg').textContent='Hint: there is a '+ch.toUpperCase()+'.';check();
+}
+function check(){
+ if(solved())end(true);else if(S.misses>=S.lives)end(false);else render();
+}
+function end(win){
+ S.over=true;render();
+ window.__result={win:win,word:S.word,misses:S.misses};
+ var r=rec();
+ if(opts.mode==='solo'){if(win){r.w++;r.s++;if(r.s>r.b)r.b=r.s}else{r.l++;r.s=0}saveRec(r)}
+ showRec();
+ $('#ovBadge').innerHTML='<span class="badge">'+(opts.mode==='2p'?'2 players':opts.lvl[0].toUpperCase()+opts.lvl.slice(1))+'</span>';
+ $('#ovTitle').textContent=win?'You saved him!':'He melted!';
+ var ow=$('#ovWord');ow.innerHTML='';S.word.split('').forEach(function(c){var d=document.createElement('span');d.className='slot show';d.textContent=c;ow.appendChild(d)});
+ var left=S.lives-S.misses;
+ $('#ovText').textContent=win?(left===S.lives?'Perfect, not a single miss!':'Solved with '+left+(left===1?' miss':' misses')+' to spare.')+(opts.mode==='solo'&&r.s>1?' Streak: '+r.s+'.':''):'The word was '+S.word.toUpperCase()+'. Try another one!';
+ $('#msg').textContent=win?'Saved!':'The word was '+S.word.toUpperCase()+'.';
+ setTimeout(function(){if(S&&S.over)$('#ov').hidden=false},win?500:900);
+}
+function rec(){return store.get('snowman:rec:'+opts.lvl,{w:0,l:0,s:0,b:0})}
+function saveRec(r){store.set('snowman:rec:'+opts.lvl,r)}
+function showRec(){var r=rec();var two=opts.mode==='2p';$('#recTitle').textContent=two?'Record · solo '+cap(opts.lvl)+' (2 players isn\'t counted)':'Record · '+cap(opts.lvl);$('#r1').textContent=r.w;$('#r2').textContent=r.l;$('#r3').textContent=r.s;$('#bestTxt').textContent='Best streak: '+r.b}
+function cap(s){return s[0].toUpperCase()+s.slice(1)}
+function anyDialog(){return $('#help').open||$('#setWord').open}
+function syncSeg(){
+ [['#modeSeg','mode'],['#lvlSeg','lvl'],['#catSeg','cat']].forEach(function(x){$$(x[0]+' button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.v===opts[x[1]]))})});
+ $('#catRow').hidden=opts.mode==='2p';
+ var lv=LV[opts.lvl];$('#lvlNote').textContent=lv.note+(opts.mode==='2p'?' In 2 players, Player 1 picks the word.':' Changing a setting starts a new word.');
+ showRec();
+}
+[['#modeSeg','mode'],['#lvlSeg','lvl'],['#catSeg','cat']].forEach(function(x){$$(x[0]+' button').forEach(function(b){b.addEventListener('click',function(){if(opts[x[1]]===b.dataset.v)return;opts[x[1]]=b.dataset.v;store.set('snowman:opts',opts);syncSeg();newGame()})})});
+$('#swForm').addEventListener('submit',function(e){
+ var w=$('#swInput').value.trim().toLowerCase();
+ if(!/^[a-z]{3,12}$/.test(w)){e.preventDefault();$('#swErr').textContent='Use 3 to 12 letters, A to Z only, no spaces.';return}
+ var c=$('#swClue').value.trim()||'Mystery word';
+ setTimeout(function(){start(w,c)},0);
+});
+$('#setWord').addEventListener('cancel',function(){if(!S){opts.mode='solo';syncSeg();newGame()}});
+$('#newBtn').addEventListener('click',newGame);
+$('#againBtn').addEventListener('click',newGame);
+$('#peekBtn').addEventListener('click',function(){$('#ov').hidden=true});
+$('#hintBtn').addEventListener('click',hint);
+$('#helpBtn').addEventListener('click',function(){openD($('#help'))});
+$('#help [data-close]').addEventListener('click',function(){closeD($('#help'))});
+$('#help').addEventListener('click',function(e){if(e.target===this)closeD(this)});
+document.addEventListener('keydown',function(e){
+ if(e.ctrlKey||e.metaKey||e.altKey||anyDialog())return;
+ var k=e.key.toLowerCase();
+ if(/^[a-z]$/.test(k)){guess(k);e.preventDefault()}
+ else if(k==='?'){hint()}
+ else if(k==='enter'&&S&&S.over){newGame();e.preventDefault()}
+});
+window.__snowman={state:function(){return S},words:WORDS,pool:pool,start:start,opts:function(){return opts}};
+syncSeg();
+if(opts.mode==='2p'){opts.mode='solo';syncSeg()}
+newGame();
+if(!store.get('snowman:seenHelp',false)){store.set('snowman:seenHelp',true);openD($('#help'))}
+</script>
+</body>
+</html>
