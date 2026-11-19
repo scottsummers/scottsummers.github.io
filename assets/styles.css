@@ -248,6 +248,8 @@ h2{margin:0;font:700 clamp(1.9rem,4vw,2.6rem)/1.1 var(--display);letter-spacing:
 .art-sm{--g:#7dd3fc;--g2:#c4b5fd}
 .game-art.art-sm{color:#e6ebff;background:radial-gradient(circle at 80% 20%,rgba(253,224,71,.28),transparent 50%),radial-gradient(circle at 25% 75%,rgba(125,211,252,.3),transparent 55%),linear-gradient(135deg,#0c1430,#18234a)}
 .game-art.art-mc{color:#fde68a;background:radial-gradient(circle at 25% 30%,rgba(56,189,248,.28),transparent 55%),radial-gradient(circle at 75% 75%,rgba(251,191,36,.3),transparent 55%),linear-gradient(135deg,#0e1724,#1e160c)}
+.art-bb{--g:#a3e635;--g2:#22d3ee}
+.game-art.art-bb{color:#d9f99d;background:radial-gradient(circle at 75% 25%,rgba(34,211,238,.28),transparent 55%),radial-gradient(circle at 25% 80%,rgba(163,230,53,.26),transparent 55%),linear-gradient(135deg,#0b1a1f,#141a2e)}
 .game-art.art-pu{color:#e6ebff;background:radial-gradient(circle at 25% 30%,rgba(52,211,153,.3),transparent 55%),radial-gradient(circle at 75% 75%,rgba(167,139,250,.32),transparent 55%),linear-gradient(135deg,#0e1a1c,#161228)}
 .game-art.art-gw{color:#e6ebff;background:radial-gradient(circle at 25% 25%,rgba(56,189,248,.3),transparent 55%),radial-gradient(circle at 75% 75%,rgba(251,113,133,.3),transparent 55%),linear-gradient(135deg,#0e1724,#1e1218)}
 /* ---------- scouting ---------- */
