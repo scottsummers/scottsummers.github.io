@@ -2,7 +2,7 @@
 
 A new browser game is added to the homepage every Thursday. Each one is a single self-contained HTML file in `games/<slug>/`, with nothing loaded from outside the site.
 
-Rotation: once more than 20 games are showing on the homepage, the oldest weekly drops are hidden from the homepage (card removed, counts updated) until 20 remain. Hidden games are never deleted; their files stay in place so the URL keeps working, and they're marked **archived** below. Chess and Word Explorer are never hidden.
+Rotation: once more than 20 games are showing on the homepage, the oldest weekly drops are hidden from the homepage (card removed, counts updated) until 20 remain. Hidden games are never deleted; their files stay in place so the URL keeps working, and they're marked **archived** below. Chess, Word Explorer and Lantern Deep are featured games: they are never hidden and are not part of the weekly rotation.
 
 ## Games already on the site before the weekly drops started
 
@@ -17,6 +17,14 @@ Rotation: once more than 20 games are showing on the homepage, the oldest weekly
 | 2026-10-21 | Sudoku | `sudoku` | Number puzzle | Live |
 | 2026-10-22 | Snake | `snake` | Arcade / reflex | Live |
 | 2026-10-26 | Grid War | `grid-war` | Pen-and-paper strategy (dots and boxes) | Live |
+
+## Featured games (not weekly drops)
+
+Bigger builds shown in the top row of the Games section. They are never rotated off or hidden.
+
+| Added | Name | Slug | Genre | Status |
+|---|---|---|---|---|
+| 2026-11-22 | Lantern Deep | `lantern-deep` | Real-time roguelike action adventure | Featured (never hidden) |
 
 ## Weekly drops
 
