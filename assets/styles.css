@@ -268,3 +268,15 @@ h2{margin:0;font:700 clamp(1.9rem,4vw,2.6rem)/1.1 var(--display);letter-spacing:
   .scout-card .scout-art{min-height:150px;border-right:0;border-bottom:1px solid var(--line)}
   .scout-card .scout-art svg{width:100px;height:100px}
 }
+/* ---------- featured wide game card (Lantern Deep) ---------- */
+.game.wide{grid-column:1/-1;display:grid;grid-template-columns:minmax(240px,38%) 1fr}
+.game.wide .game-art{height:auto;min-height:240px;border-bottom:0;border-right:1px solid var(--line)}
+.game.wide .game-art svg{width:180px;height:180px}
+.art-ld{color:#fde68a;background:radial-gradient(circle at 50% 45%,rgba(251,191,36,.34),transparent 58%),radial-gradient(circle at 85% 90%,rgba(167,139,250,.3),transparent 55%),linear-gradient(135deg,#1a1326,#0d0b18)}
+.game-feats{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 .9rem;padding:0;list-style:none}
+.game-feats li{font-size:.78rem;padding:.2rem .6rem;border-radius:999px;border:1px solid var(--line-hi);background:rgba(255,255,255,.05);color:var(--muted)}
+@media (max-width:760px){
+  .game.wide{grid-template-columns:1fr}
+  .game.wide .game-art{min-height:170px;border-right:0;border-bottom:1px solid var(--line)}
+  .game.wide .game-art svg{width:120px;height:120px}
+}
