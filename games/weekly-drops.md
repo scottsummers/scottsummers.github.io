@@ -26,6 +26,14 @@ Bigger builds shown in the top row of the Games section. They are never rotated 
 |---|---|---|---|---|
 | 2026-11-22 | Lantern Deep | `lantern-deep` | Real-time roguelike action adventure | Featured (never hidden) |
 
+## Bonus games (added outside the Thursday schedule)
+
+Extra games added on request, not as a Thursday drop. They sit in the Brain breaks grid like the weekly drops and count toward the 20-game homepage limit. Don't make another game in the same genre as one listed here.
+
+| Date | Name | Slug | Genre | Description | Status |
+|---|---|---|---|---|---|
+| 2026-11-25 | Campfire Rows | `campfire-rows` | Logic (Star Battle / "Queens"-style placement puzzle) | Scouting campout logic puzzle: place one campfire in every row, column and colored campsite with no two fires touching. Generated puzzles with exactly one solution, 5×5 to 9×9, logic-step hints, a daily puzzle and best times. | Live |
+
 ## Weekly drops
 
 | Date | Name | Slug | Genre | Description | Status |

@@ -8,7 +8,7 @@ This repo is a static GitHub Pages site. There is no build step.
 
 ## Games
 
-Fourteen games you can play in the browser — no install, no sign-in. Three featured builds sit at the top of the [Games](https://scottsummers.github.io/#games) section; the rest are shorter puzzles and arcade games.
+Fifteen games you can play in the browser — no install, no sign-in. Three featured builds sit at the top of the [Games](https://scottsummers.github.io/#games) section; the rest are shorter puzzles and arcade games.
 
 ### Featured
 
@@ -28,6 +28,10 @@ The drop log and rotation rules live in [`games/weekly-drops.md`](games/weekly-d
 - **[Mancala](https://scottsummers.github.io/games/mancala/)** (2026-11-05) — Kalah-rules stone-sowing, vs the computer or a friend.
 - **[Snowman](https://scottsummers.github.io/games/snowman/)** (2026-11-12) — Guess the word before the snowman melts. Kid-friendly word lists, hints, and a 2-player mode.
 - **[Brick Breaker](https://scottsummers.github.io/games/brick-breaker/)** (2026-11-19) — Paddle-and-ball Breakout with stages, power-ups, and touch controls.
+
+**Bonus games**
+
+- **[Campfire Rows](https://scottsummers.github.io/games/campfire-rows/)** (2026-11-25) — Campout logic puzzle: one campfire per row, column and campsite, and no two fires touching. Daily puzzle, hints, 5×5 to 9×9.
 
 **Also on the site**
 
