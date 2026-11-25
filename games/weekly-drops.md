@@ -2,7 +2,7 @@
 
 A new browser game is added to the homepage every Thursday. Each one is a single self-contained HTML file in `games/<slug>/`, with nothing loaded from outside the site.
 
-Rotation: once more than 20 games are showing on the homepage, the oldest weekly drops are hidden from the homepage (card removed, counts updated) until 20 remain. Hidden games are never deleted; their files stay in place so the URL keeps working, and they're marked **archived** below. Chess, Word Explorer and Lantern Deep are featured games: they are never hidden and are not part of the weekly rotation.
+Rotation: once more than 20 games are showing on the homepage, the oldest weekly drops are hidden from the homepage (card removed, counts updated) until 20 remain. Hidden games are never deleted; their files stay in place so the URL keeps working, and they're marked **archived** below. Chess, Word Explorer, Lantern Deep and Castaway Cove are featured games: they are never hidden and are not part of the weekly rotation.
 
 ## Games already on the site before the weekly drops started
 
@@ -25,6 +25,7 @@ Bigger builds shown in the top row of the Games section. They are never rotated 
 | Added | Name | Slug | Genre | Status |
 |---|---|---|---|---|
 | 2026-11-22 | Lantern Deep | `lantern-deep` | Real-time roguelike action adventure | Featured (never hidden) |
+| 2026-11-25 | Castaway Cove | `castaway-cove` | Gather-and-build adventure RPG (open island map, crafting, base building) | Featured (never hidden); also logged under Bonus games |
 
 ## Bonus games (added outside the Thursday schedule)
 
@@ -32,6 +33,7 @@ Extra games added on request, not as a Thursday drop. They sit in the Brain brea
 
 | Date | Name | Slug | Genre | Description | Status |
 |---|---|---|---|---|---|
+| 2026-11-25 | Castaway Cove | `castaway-cove` | Gather-and-build adventure RPG (top-down open map, auto-gathering, base building, crafting and gear upgrades) | Shipwrecked pirate island adventure: auto-chop palms and mine rocks, haul resources back to camp to build a campfire, workbench, storage chest, forge and lookout, craft axe/pickaxe/cutlass/armor upgrades, clear the gated ruins and fort, beat Captain Saltbeard's Ghost and repair a ship to escape. Minimap, objective tracker, autosave. Don't make another game in this genre (gather/craft/base-building RPG). | Live · featured wide card next to Lantern Deep (not in the Brain breaks grid, so it doesn't count toward the 20-game limit; never hidden) |
 | 2026-11-25 | Campfire Rows | `campfire-rows` | Logic (Star Battle / "Queens"-style placement puzzle) | Scouting campout logic puzzle: place one campfire in every row, column and colored campsite with no two fires touching. Generated puzzles with exactly one solution, 5×5 to 9×9, logic-step hints, a daily puzzle and best times. | Live |
 
 ## Weekly drops
