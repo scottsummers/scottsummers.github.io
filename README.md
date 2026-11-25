@@ -12,7 +12,7 @@ Sixteen games you can play in the browser — no install, no sign-in. Four featu
 
 ### Featured
 
-- **[Castaway Cove](https://scottsummers.github.io/games/castaway-cove/)** — Shipwrecked pirate island adventure. Chop, mine and haul resources back to camp, build a campfire, workbench, forge and lookout, craft better tools and cutlasses, open up the ruins and the pirate fort, beat the ghost captain and sail home. Autosaves so it can be played a few minutes at a time. (`games/castaway-cove/`)
+- **[Castaway Cove](https://scottsummers.github.io/games/castaway-cove/)** — Shipwrecked pirate voyage across four islands. Chop, mine and haul resources back to camp, build a campfire, workbench, forge and lookout, craft better tools and cutlasses, open up the ruins and the boss's lair, beat the boss, fix the ship and sail on. Each island (Castaway Cove, Fogmire Isle, Ember Isle, Kraken's Reef) is bigger and tougher, with new creatures, a new ore and its own boss. Level and gear carry over; Easy/Normal/Hard and New Voyage+. Autosaves so it can be played a few minutes at a time. (`games/castaway-cove/`)
 - **[Lantern Deep](https://scottsummers.github.io/games/lantern-deep/)** — Real-time roguelike dungeon adventure. Every run builds a new dungeon: explore by lantern light, fight, grab loot, pick perks at the campfire, and beat two bosses across ten floors. (`games/lantern-deep/`)
 - **[AI-Built Chess](https://scottsummers.github.io/chess/)** — Full chess game in one HTML file, with castling, promotion, undo, and a computer opponent at Easy, Medium, and Hard. (`chess/`)
 - **[Word Explorer](https://scottsummers.github.io/word-explorer/)** — Customizable classroom word game, built as a teaching aid. Source lives in a [separate repo](https://github.com/scottsummers/word-explorer).
@@ -32,7 +32,7 @@ The drop log and rotation rules live in [`games/weekly-drops.md`](games/weekly-d
 
 **Bonus games**
 
-- **[Castaway Cove](https://scottsummers.github.io/games/castaway-cove/)** (2026-11-25) — Also featured above. Shipwrecked pirate island gather-and-build adventure.
+- **[Castaway Cove](https://scottsummers.github.io/games/castaway-cove/)** (2026-11-25) — Also featured above. Shipwrecked pirate gather-and-build adventure; now a four-island voyage.
 - **[Campfire Rows](https://scottsummers.github.io/games/campfire-rows/)** (2026-11-25) — Campout logic puzzle: one campfire per row, column and campsite, and no two fires touching. Daily puzzle, hints, 5×5 to 9×9.
 
 **Also on the site**
