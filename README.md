@@ -8,7 +8,7 @@ This repo is a static GitHub Pages site. There is no build step.
 
 ## Games
 
-Sixteen games you can play in the browser — no install, no sign-in. Four featured builds sit at the top of the [Games](https://scottsummers.github.io/#games) section; the rest are shorter puzzles and arcade games.
+Seventeen games you can play in the browser — no install, no sign-in. Four featured builds sit at the top of the [Games](https://scottsummers.github.io/#games) section; the rest are shorter puzzles and arcade games.
 
 ### Featured
 
@@ -29,6 +29,7 @@ The drop log and rotation rules live in [`games/weekly-drops.md`](games/weekly-d
 - **[Mancala](https://scottsummers.github.io/games/mancala/)** (2026-11-05) — Kalah-rules stone-sowing, vs the computer or a friend.
 - **[Snowman](https://scottsummers.github.io/games/snowman/)** (2026-11-12) — Guess the word before the snowman melts. Kid-friendly word lists, hints, and a 2-player mode.
 - **[Brick Breaker](https://scottsummers.github.io/games/brick-breaker/)** (2026-11-19) — Paddle-and-ball Breakout with stages, power-ups, and touch controls.
+- **[Reversi](https://scottsummers.github.io/games/reversi/)** (2026-11-26) — Classic Othello-rules disc-flipping board game, vs the computer (Easy, Normal, Hard) or a friend.
 
 **Bonus games**
 
