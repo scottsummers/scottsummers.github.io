@@ -137,6 +137,28 @@ body.app .apponly{display:inline-flex}
 .apponly{display:none}
 #fsTip ol{margin:.4rem 0 1.1rem;padding-left:1.2rem;color:var(--muted)}#fsTip li{margin:.35rem 0}#fsTip li b{color:var(--text)}
 .share{display:inline-block;width:16px;height:16px;vertical-align:-2px;stroke:currentColor;fill:none;stroke-width:2}
+/* cooldown overlay on the Dash and Eat buttons */
+.pbtn{position:relative;overflow:hidden}
+.pbtn .lbl{display:grid;place-items:center;transition:opacity .15s}
+.pbtn .cd{position:absolute;inset:0;border-radius:50%;pointer-events:none;background:conic-gradient(rgba(7,8,15,.66) calc(var(--cd,0)*360deg),transparent 0)}
+.pbtn .cdt{position:absolute;inset:0;display:none;place-items:center;pointer-events:none;font:800 1rem var(--mono);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.9)}
+.pbtn.cooling .cdt{display:grid}.pbtn.cooling .lbl{opacity:.35}
+.pbtn.empty{opacity:.55}
+.pbtn.ready{animation:readyPop .35s ease-out}
+@keyframes readyPop{0%{box-shadow:0 0 0 0 rgba(253,224,71,.9)}100%{box-shadow:0 0 0 14px rgba(253,224,71,0)}}
+/* save code dialog */
+#saveDlg{width:min(520px,calc(100vw - 2rem))}
+#saveDlg h3{margin:1rem 0 .35rem;font:750 1rem var(--font)}
+#saveDlg .sum{margin:.1rem 0 .45rem;font-size:.86rem;color:var(--muted)}
+#saveDlg textarea{display:block;width:100%;min-width:0;resize:vertical;padding:.6rem .7rem;border-radius:12px;border:1px solid var(--line-hi);background:rgba(0,0,0,.35);color:var(--text);font:500 16px/1.35 var(--mono);word-break:break-all;overflow-wrap:anywhere}
+#saveDlg textarea#svOut{font-size:12px;color:var(--muted)}
+#saveDlg textarea:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+.svbtns{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;margin-top:.55rem}
+dialog .svbtns .btn{width:auto}
+.svok{font-weight:700;color:#4ade80;font-size:.9rem}
+.sverr{margin:.45rem 0 0;color:#f87171;font-size:.88rem;font-weight:600}.sverr:empty{display:none}
+.svwarn{margin:.45rem 0 0;padding:.5rem .7rem;border-radius:10px;background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.4);color:#fed7aa;font-size:.88rem}.svwarn:empty{display:none}
+#saveDlg .close{margin-top:1.1rem}
 </style>
 </head>
 <body>
@@ -163,15 +185,15 @@ body.app .apponly{display:inline-flex}
           <dl class="ovstats" id="ovStats" hidden></dl>
           <div class="ovdiff" id="ovDiff" hidden><div class="seg" role="group" aria-label="Difficulty"><button type="button" data-d="easy" aria-pressed="false">Easy</button><button type="button" data-d="normal" aria-pressed="true">Normal</button><button type="button" data-d="hard" aria-pressed="false">Hard</button></div><p id="ovDiffNote"></p></div>
           <div class="ovbtns"><button class="btn primary" id="ovBtn" type="button">New game</button><button class="btn" id="ovBtn2" type="button" hidden>New game</button></div>
-          <div class="ovextra" id="ovExtra" hidden><button class="btn" id="ovHelp" type="button">How to play</button><button class="btn" id="ovMute" type="button">Sound on</button><a class="btn apponly" href="/">← Home</a></div>
+          <div class="ovextra" id="ovExtra" hidden><button class="btn" id="ovHelp" type="button">How to play</button><button class="btn" id="ovMute" type="button">Sound on</button><button class="btn" id="ovSave" type="button">Save code</button><a class="btn apponly" href="/">← Home</a></div>
         </div>
       </div>
     </div>
     <div class="pad" id="pad" aria-label="Touch controls">
       <div class="stick" id="stick" aria-label="Move joystick"><div class="knob" id="knob"></div></div>
       <div class="pbtns">
-        <button class="pbtn eat" id="bEat" type="button" aria-label="Eat food to heal">Eat<small id="bEatN">0</small></button>
-        <button class="pbtn dash" id="bDash" type="button" aria-label="Dash">Dash</button>
+        <button class="pbtn eat" id="bEat" type="button" aria-label="Eat food to heal"><span class="cd" aria-hidden="true"></span><span class="lbl">Eat<small id="bEatN">0</small></span><span class="cdt" aria-hidden="true"></span></button>
+        <button class="pbtn dash" id="bDash" type="button" aria-label="Dash"><span class="cd" aria-hidden="true"></span><span class="lbl">Dash</span><span class="cdt" aria-hidden="true"></span></button>
       </div>
     </div>
     <div class="mbar"><button class="btn" id="pauseBtn2" type="button">Pause</button><button class="btn fsonly" id="fsExit" type="button">Exit full screen</button></div>
@@ -191,6 +213,7 @@ body.app .apponly{display:inline-flex}
     <li>The voyage <b>never ends</b>. Every time you sail you land on a <b>brand new random island</b>: tropical, swamp, volcano, frozen, desert, mushroom or a ghost-ship graveyard, with new creatures, a new ore and a <b>random boss</b>. Each island is bigger and tougher than the last.</li>
     <li>Bosses fight in different ways: some throw bombs, <b>Sandfang</b> burrows under you, <b>Captain Dreadmast</b> blinks and fires rings of ghost shots, <b>Polly</b> dives at you (watch the red line) and <b>King Morel</b> leaves spore clouds you need to walk out of.</li>
     <li>Your <b>level, gear and bag</b> sail with you, plus all your doubloons and up to 30 food. Everything else stays behind, so each island starts with a fresh camp. Gear keeps getting better: <b>+1, +2…</b></li>
+    <li>Playing on another device? Open the menu and tap <b>Save code</b> to copy your voyage and load it there.</li>
     <li>See how far you can get. Your <b>best voyage</b> for each difficulty shows on the title screen. The game saves by itself.</li>
     <li><b>Full screen:</b> tap the full-screen button. On iPhone, tap <b>Share</b>, then <b>Add to Home Screen</b> to play full screen.</li>
   </ul>
@@ -202,9 +225,22 @@ body.app .apponly{display:inline-flex}
   <ol>
     <li>Tap the <b>Share</b> button <svg class="share" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4M5 12v7h14v-7"/></svg> at the bottom of Safari.</li>
     <li>Scroll down and tap <b>Add to Home Screen</b>.</li>
-    <li>Open <b>Castaway Cove</b> from your Home Screen. Your save carries over.</li>
+    <li>Open <b>Castaway Cove</b> from your Home Screen. Your save doesn't carry over by itself: use <b>Save code</b> in the menu to bring it along.</li>
   </ol>
   <button class="btn primary" data-close type="button">Got it</button>
+</dialog>
+<dialog id="saveDlg" aria-labelledby="saveTitle">
+  <h2 id="saveTitle">Save <span>code</span></h2>
+  <p class="muted" style="margin:0">Move your voyage to another phone or computer. Copy the code here, send it to yourself (text, AirDrop, email or a note), then paste it into <b>Load a save code</b> on the other device.</p>
+  <h3>This device's save</h3>
+  <p class="sum" id="svSum"></p>
+  <textarea id="svOut" rows="4" readonly spellcheck="false" autocomplete="off" aria-label="Your save code"></textarea>
+  <div class="svbtns"><button class="btn primary" id="svCopy" type="button">Copy code</button><button class="btn" id="svShare" type="button" hidden>Share…</button><span class="svok" id="svCopied" role="status" aria-live="polite"></span></div>
+  <h3>Load a save code</h3>
+  <textarea id="svIn" rows="3" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Paste a code that starts with CC1-" aria-label="Paste a save code" aria-describedby="svErr"></textarea>
+  <p class="sverr" id="svErr" role="alert"></p><p class="svwarn" id="svWarn" role="status"></p>
+  <div class="svbtns"><button class="btn primary" id="svLoad" type="button">Load code</button></div>
+  <button class="btn close" data-close type="button">Close</button>
 </dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <canvas id="fx" aria-hidden="true"></canvas>
@@ -620,9 +656,10 @@ function nodeCollide(e){for(var i=0;i<S.nodes.length;i++){var n=S.nodes[i];if(!n
   if(dx>rr||dx<-rr||dy>rr||dy<-rr)continue;var q=dx*dx+dy*dy;if(q<rr*rr&&q>1e-6){var d=Math.sqrt(q);e.x+=dx/d*(rr-d);e.y+=dy/d*(rr-d)}}collide(e)}
 
 /* ---------- player ---------- */
-function doDash(){var p=S.p;if(S.state!=='play'||p.dashCd>0)return;p.dashT=.17;p.dashCd=.8;sfx('dash');puff(p.x,p.y+8,'rgba(255,255,255,.7)',6,80)}
+var DASHCD=.8,EATCD=1.2;
+function doDash(){var p=S.p;if(S.state!=='play'||p.dashCd>0)return;p.dashT=.17;p.dashCd=DASHCD;sfx('dash');puff(p.x,p.y+8,'rgba(255,255,255,.7)',6,80)}
 function eat(){var p=S.p;if(S.state!=='play'||p.eatCd>0)return;if(have('food')<=0){say('nofood','No food! Pick berries or chop palms for coconuts.',2);return}
-  if(p.hp>=maxHp()){say('fullhp','You are already at full health.',2);return}var heal=Math.round(20+maxHp()*.08);take('food');p.hp=Math.min(maxHp(),p.hp+heal);p.eatCd=1.2;floatTxt(p.x,p.y-30,'+'+heal,'#4ade80');sfx('eat');puff(p.x,p.y-10,'#4ade80',8,90)}
+  if(p.hp>=maxHp()){say('fullhp','You are already at full health.',2);return}var heal=Math.round(20+maxHp()*.08);take('food');p.hp=Math.min(maxHp(),p.hp+heal);p.eatCd=EATCD;floatTxt(p.x,p.y-30,'+'+heal,'#4ade80');sfx('eat');puff(p.x,p.y-10,'#4ade80',8,90)}
 function hurtP(d){var p=S.p;if(p.inv>0||p.dashT>0||S.state!=='play'||god)return;d=Math.max(1,Math.round(d*(1-armDef(S.gear.arm))));p.hp-=d;p.inv=.45;p.lastHurt=S.time;p.flash=.2;S.shake=.18;
   floatTxt(p.x,p.y-28,'-'+d,'#f87171');sfx('hurt');if(p.hp<=0){p.hp=0;die()}}
 function die(){S.state='dead';S.deadT=2.6;S.deaths++;var lost=0;RES.forEach(function(k){if(k==='gold'||!S.carry[k])return;var h=Math.floor(S.carry[k]/2);S.carry[k]-=h;lost+=h});S.lostLast=lost;
@@ -848,7 +885,8 @@ function load(){var o=store.get(SAVE,null);if(!o||!o.p||(o.v!==VER&&o.v!==1&&o.v
 
 /* ---------- drawing ---------- */
 var cv=$('#game'),ctx=cv.getContext('2d'),cssW=1,cssH=1,dpr=1,Z=1,VW=1,VH=1,cam={x:0,y:0};
-function resize(){var r=cv.getBoundingClientRect();cssW=Math.max(1,r.width);cssH=Math.max(1,r.height);dpr=Math.min(window.devicePixelRatio||1,2);
+var PADON=false;
+function resize(){var pd=document.getElementById('pad');PADON=!!pd&&getComputedStyle(pd).display!=='none';var r=cv.getBoundingClientRect();cssW=Math.max(1,r.width);cssH=Math.max(1,r.height);dpr=Math.min(window.devicePixelRatio||1,2);
   var w=Math.round(cssW*dpr),h=Math.round(cssH*dpr);if(cv.width!==w||cv.height!==h){cv.width=w;cv.height=h}
   Z=clamp(cssH/560,.72,1.4);if(cssW/Z<360)Z=cssW/360;VW=cssW/Z;VH=cssH/Z}
 function th(x,y){var h=Math.imul(x*374761393+y*668265263|0,1274126177);return ((h^h>>>13)>>>0)%100}
@@ -1136,6 +1174,8 @@ function drawHUD(){var W=cssW,H=cssH,cp=W<560,p=S.p;ctx.setTransform(dpr,0,0,dpr
   slots.forEach(function(s,i){var x=gx+i*(gs+gg);ctx.fillStyle=s[4]?'rgba(20,28,48,.85)':'rgba(8,12,24,.55)';rrect(x,gy,gs,gs,9);ctx.fill();ctx.strokeStyle=s[4]?'rgba(251,146,60,.65)':'rgba(255,255,255,.14)';ctx.lineWidth=1.5;ctx.stroke();
     if(s[4]){gearIcon(s[0],x+gs/2,gy+gs/2-4,s[2],gs*.62);var tl='T'+s[2];ctx.font='800 '+(gs<48?9:10)+'px system-ui';ctx.textAlign='center';ctx.fillStyle='rgba(0,0,0,.55)';rrect(x+gs/2-12,gy+gs-14,24,12,5);ctx.fill();ctx.fillStyle='#fbbf24';ctx.fillText(tl,x+gs/2,gy+gs-5)}
     else{ctx.globalAlpha=.35;gearIcon(s[0],x+gs/2,gy+gs/2-2,0,gs*.55);ctx.globalAlpha=1;ctx.fillStyle='rgba(226,232,240,.75)';ctx.fillRect(x+gs-13,gy+5,8,7);ctx.strokeStyle='rgba(226,232,240,.75)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x+gs-9,gy+5,3,Math.PI,0);ctx.stroke()}});
+  // dash / eat cooldown chips for keyboard play (phones show them on the touch buttons instead)
+  if(!PADON&&(S.state==='play'||S.state==='dead'))cdChips(W,H);
   // objective
   if(o&&S.state!=='sail'&&S.state!=='voyage'){ctx.font='bold 13px system-ui';var ow=Math.min(W-16,cp?W-16:440),lines=wrap(o.s||'',ow-38);ctx.font='12px system-ui';lines=wrap(o.s||'',ow-38).slice(0,2);var oh=24+lines.length*15,ox=cp?8:8,oy=gy-oh-8;
     panel(ox,oy,ow,oh,10);circ(ox+15,oy+15,8,'#fbbf24');ctx.fillStyle='#0a0b14';ctx.font='bold 11px system-ui';ctx.textAlign='center';ctx.fillText('!',ox+15,oy+19);
@@ -1251,6 +1291,18 @@ function drawVoyage(){var W=cssW,H=cssH,t=performance.now()/1000,cp=W<560,i;ctx.
   ctx.fillStyle='#cbd5e1';ctx.font='600 '+(cp?11:13)+'px system-ui';ctx.fillText((from+1)+(from?' islands':' island')+' conquered'+(first>0?' · showing the latest':''),W/2,top+(cp?36:48))}
 function shortBoss(b){return {ghost:'Saltbeard',crabking:'Clawdius',golem:'Magmaw',kraken:'Kraken',serpent:'Sandfang',ghostcap:'Dreadmast',parrot:'Polly',mushking:'King Morel'}[b]||b}
 
+/* round cooldown chips: a dark sweep that unwinds plus the seconds left; glows when ready */
+function cdChip(x,y,r,label,key,cd,max,extra,empty){var f=clamp(cd/max,0,1),on=f<=0&&!empty;
+  ctx.fillStyle=on?'rgba(20,28,48,.9)':'rgba(8,12,24,.72)';ctx.beginPath();ctx.arc(x,y,r,0,6.2832);ctx.fill();
+  ctx.lineWidth=2;ctx.strokeStyle=on?'rgba(251,191,36,.85)':'rgba(255,255,255,.18)';ctx.stroke();
+  ctx.textAlign='center';ctx.fillStyle=empty?'rgba(226,232,240,.45)':'#f8fafc';ctx.font='800 11px system-ui';ctx.fillText(label,x,y+(f>0?-30:-1));
+  if(!(f>0)){ctx.font='600 9px system-ui';ctx.fillStyle='rgba(203,213,225,.75)';ctx.fillText(key,x,y+11)}
+  if(f>0){ctx.fillStyle='rgba(7,8,15,.7)';ctx.beginPath();ctx.moveTo(x,y);ctx.arc(x,y,r-1,-Math.PI/2,-Math.PI/2+f*6.2832);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='#fbbf24';ctx.lineWidth=3;ctx.beginPath();ctx.arc(x,y,r-1.5,-Math.PI/2+f*6.2832,-Math.PI/2+6.2832);ctx.stroke();
+    ctx.font='800 12px ui-monospace,Menlo,Consolas,monospace';ctx.lineWidth=3;ctx.strokeStyle='rgba(0,0,0,.7)';var t=cd.toFixed(1)+'s';ctx.strokeText(t,x,y+4);ctx.fillStyle='#fff';ctx.fillText(t,x,y+4)}
+  if(extra!=null){var bx=x+r*.72,by=y-r*.72;circ(bx,by,9,empty?'#7f1d1d':'#16a34a');ctx.fillStyle='#fff';ctx.font='800 9.5px system-ui';ctx.fillText(String(extra),bx,by+3.5)}}
+function cdChips(W,H){var p=S.p,r=23,y=H-r-12,f=have('food');cdChip(W-r-12,y,r,'Dash','Space',p.dashCd,DASHCD,null,false);cdChip(W-3*r-22,y,r,'Eat','E',p.eatCd,EATCD,f>99?'99+':f,f<=0)}
+
 /* ---------- UI flow ---------- */
 var ov=$('#ov'),confirmNew=0;
 function fmtTime(s){s=Math.floor(s);var h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return (h?h+':'+(m<10?'0':''):'')+m+':'+(x<10?'0':'')+x}
@@ -1288,6 +1340,7 @@ $('#menuBtn').addEventListener('click',function(){S.gesture=true;if(S.state==='p
 $('#pauseBtn2').addEventListener('click',function(){S.gesture=true;if(S.state==='play')pause();else if(S.state==='pause')resume();this.blur()});
 function setMute(m){mute=m;store.set('cc:mute',m);var b=$('#muteBtn'),t=m?'Sound off':'Sound on';$('#muteLb').textContent=t;b.setAttribute('aria-label',t);b.setAttribute('aria-pressed',String(!m));$('#ovMute').textContent=t}
 $('#muteBtn').addEventListener('click',function(){S.gesture=true;setMute(!mute);this.blur()});
+$('#ovSave').addEventListener('click',function(){openSaveDlg();this.blur()});
 $('#ovMute').addEventListener('click',function(){S.gesture=true;setMute(!mute);this.blur()});$('#ovHelp').addEventListener('click',function(){openHelp();this.blur()});setMute(mute);
 
 /* ---------- full screen: Fullscreen API on the game box; iPhone gets an Add to Home Screen tip ---------- */
@@ -1308,7 +1361,7 @@ document.addEventListener('fullscreenchange',fsSync);document.addEventListener('
 
 /* ---------- input ---------- */
 var KM={arrowup:'up',w:'up',arrowdown:'down',s:'down',arrowleft:'left',a:'left',arrowright:'right',d:'right'};
-function dlgOpen(){return $('#help').open}
+function dlgOpen(){return $$('dialog').some(function(d){return d.open})}
 document.addEventListener('keydown',function(e){S.gesture=true;if(e.metaKey||e.ctrlKey||e.altKey||dlgOpen())return;var k=e.key.toLowerCase();
   if(k==='p'||k==='escape'){if(S.state==='play')pause();else if(S.state==='pause')resume();e.preventDefault();return}
   if(k==='m'){setMute(!mute);return}
@@ -1335,6 +1388,67 @@ addEventListener('pagehide',save);
 addEventListener('blur',function(){S.keys={};resetStick()});
 addEventListener('resize',resize);if(window.ResizeObserver)new ResizeObserver(resize).observe($('#cvwrap'));
 
+/* ---------- save code: move a voyage between devices with a copy-and-paste code (no server) ----------
+   Format: CC1-<Z|J><base64url payload>-<crc32 hex of the payload bytes>
+   Z = raw-deflate compressed JSON (CompressionStream), J = plain JSON when compression isn't available. */
+var svDlg=$('#saveDlg'),svPending=null;
+function crc32(u){var t=crc32.t,c,i,k;if(!t){t=crc32.t=new Uint32Array(256);for(i=0;i<256;i++){c=i;for(k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[i]=c>>>0}}c=0xFFFFFFFF;for(i=0;i<u.length;i++)c=t[(c^u[i])&255]^(c>>>8);return ((c^0xFFFFFFFF)>>>0).toString(16).padStart(8,'0')}
+function b64u(u){var s='';for(var i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function unb64u(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
+function zipOk(){return typeof CompressionStream==='function'&&typeof DecompressionStream==='function'&&typeof Response==='function'}
+function zipRun(u,un){var cs=un?new DecompressionStream('deflate-raw'):new CompressionStream('deflate-raw');return new Response(new Blob([u]).stream().pipeThrough(cs)).arrayBuffer().then(function(b){return new Uint8Array(b)})}
+function svData(){var o={f:'cc',v:1,at:Date.now(),save:store.get(SAVE,null),best:bestAll()},old=store.get('cc:bestv',null);if(old!=null)o.bestOld=old;return o}
+function svEncode(o){var u=new TextEncoder().encode(JSON.stringify(o));
+  return (zipOk()?zipRun(u,false).then(function(z){return ['Z',z]},function(){return ['J',u]}):Promise.resolve(['J',u])).then(function(r){return 'CC1-'+r[0]+b64u(r[1])+'-'+crc32(r[1])})}
+function svDecode(code){code=String(code||'').replace(/\s+/g,'');
+  if(!code)return Promise.reject(new Error('Paste a save code first.'));
+  var m=/^CC1-([ZJ])([A-Za-z0-9_-]+)-([0-9a-fA-F]{8})$/.exec(code);
+  if(!m){if(/^CC\d+-/.test(code)&&!/^CC1-/.test(code))return Promise.reject(new Error('This code is from a newer version of Castaway Cove. Reload the game and try again.'));
+    return Promise.reject(new Error(/^CC1-/.test(code)?'This code looks cut off. Copy the whole code, from CC1- to the end, and paste it again.':"That isn't a Castaway Cove save code. Codes start with CC1-."))}
+  var u;try{u=unb64u(m[2])}catch(e){return Promise.reject(new Error('This code has a typo in it. Copy it again.'))}
+  if(crc32(u)!==m[3].toLowerCase())return Promise.reject(new Error("This code doesn't check out: part of it is missing or changed. Copy the whole code again."));
+  if(m[1]==='Z'&&!zipOk())return Promise.reject(new Error("This browser can't open compressed save codes. Try a newer browser."));
+  return (m[1]==='Z'?zipRun(u,true):Promise.resolve(u)).then(function(j){var o=JSON.parse(new TextDecoder().decode(j));
+    if(!o||o.f!=='cc'||typeof o.v!=='number')throw new Error("That isn't a Castaway Cove save code.");
+    if(o.v>1)throw new Error('This code is from a newer version of Castaway Cove. Reload the game and try again.');
+    var sv=o.save;if(sv!=null&&!(sv&&typeof sv==='object'&&sv.p&&typeof sv.p.x==='number'&&[1,2,3].indexOf(sv.v)>=0))throw new Error('The voyage inside this code is damaged.');
+    if(o.best!=null&&typeof o.best!=='object')throw new Error('The best voyages inside this code are damaged.');return o},
+   function(e){throw (e&&e.message&&/code/.test(e.message))?e:new Error("This code doesn't check out: part of it is missing or changed. Copy the whole code again.")})}
+function svSummary(o){var s=o.save,b=o.best||{},bits=[];
+  if(s){var k=s.v===1?0:s.isl|0,nm=s.v===3&&k?(s.hist&&s.hist[k-1]&&s.hist[k-1].name):(LEGACY[k]&&LEGACY[k].name);bits.push('Island '+(k+1)+(nm?' ('+nm+')':'')+' · Level '+((s.p&&s.p.lvl)||1)+' · '+((DIFF[s.diff]||DIFF.normal).n))}
+  else bits.push('No voyage in progress');
+  var bb=['easy','normal','hard'].filter(function(d){return b[d]&&b[d].isl}).map(function(d){return DIFF[d].n+' '+b[d].isl});if(bb.length)bits.push('Best: '+bb.join(', '));return bits.join(' · ')}
+function openSaveDlg(){S.gesture=true;if(S.state==='play')pause();if(S.state==='pause')save();
+  $('#svCopied').textContent='';$('#svErr').textContent='';$('#svWarn').textContent='';$('#svIn').value='';svPending=null;$('#svLoad').textContent='Load code';
+  var o=svData(),has=!!o.save||Object.keys(o.best).length>0;$('#svSum').textContent=has?svSummary(o):'Nothing saved on this device yet. Start a voyage first, or load a code below.';
+  var out=$('#svOut');out.value=has?'Making your code…':'';$('#svCopy').disabled=!has;$('#svShare').hidden=!(has&&navigator.share);
+  if(has)svEncode(o).then(function(c){out.value=c;out.setAttribute('data-len',c.length)},function(){out.value='';$('#svSum').textContent="Couldn't make a code on this browser."});
+  if(typeof svDlg.showModal==='function')svDlg.showModal();else svDlg.setAttribute('open','')}
+function closeSaveDlg(){if(svDlg.close)svDlg.close();else svDlg.removeAttribute('open')}
+function svCopied(msg){var c=$('#svCopied');c.textContent=msg;clearTimeout(svCopied.t);svCopied.t=setTimeout(function(){c.textContent=''},3500)}
+function svCopy(){var out=$('#svOut'),code=out.value;if(!/^CC1-/.test(code))return;
+  function fallback(){out.focus();out.select();out.setSelectionRange(0,code.length);var ok=false;try{ok=document.execCommand('copy')}catch(e){}
+    svCopied(ok?'Copied!':'Selected: press and hold (or Ctrl/Cmd+C) to copy')}
+  if(navigator.clipboard&&navigator.clipboard.writeText&&window.isSecureContext)navigator.clipboard.writeText(code).then(function(){svCopied('Copied!')},fallback);else fallback()}
+function svLoad(){var err=$('#svErr'),warn=$('#svWarn'),code=$('#svIn').value;err.textContent='';
+  var p=svPending&&svPending.code===code.replace(/\s+/g,'')?Promise.resolve(svPending.o):svDecode(code);
+  p.then(function(o){var cur=hasSave()?store.get(SAVE,null):null;
+    if(o.save&&cur&&!(svPending&&svPending.o===o)){svPending={code:code.replace(/\s+/g,''),o:o};var ci=saveInfo();
+      warn.textContent='This replaces the voyage on this device ('+(ci?'Island '+(ci.isl+1)+', Level '+ci.lvl:'in progress')+') with: '+svSummary(o)+'. Tap again to confirm.';$('#svLoad').textContent='Replace my voyage';return}
+    svApply(o)},function(e){svPending=null;warn.textContent='';$('#svLoad').textContent='Load code';err.textContent=e.message||'That code could not be read.'})}
+function svApply(o){var err=$('#svErr'),old=localStorage.getItem(SAVE);
+  var b=bestAll(),nb=o.best||{};['easy','normal','hard'].forEach(function(d){if(nb[d]&&nb[d].isl&&(!b[d]||nb[d].isl>b[d].isl))b[d]=nb[d]});store.set('cc:bestv2',b);
+  if(o.bestOld!=null&&store.get('cc:bestv',null)==null)store.set('cc:bestv',o.bestOld);
+  svPending=null;$('#svWarn').textContent='';$('#svLoad').textContent='Load code';
+  if(!o.save){closeSaveDlg();if(S.state==='title')showTitle();toast('Best voyages loaded (that code had no voyage in progress)',3000);return}
+  store.set(SAVE,o.save);var ok=false;try{ok=load()}catch(e){ok=false}
+  if(!ok){if(old==null)store.del(SAVE);else try{localStorage.setItem(SAVE,old)}catch(e){}try{if(old!=null)load()}catch(e){}err.textContent='The voyage inside this code could not be loaded. Nothing was changed.';return}
+  closeSaveDlg();S.state='play';S.gesture=true;hideOv();banner('Voyage loaded!','Island '+(ISLE+1)+' · '+I.n+' · Level '+S.p.lvl,3,'#fde68a');save()}
+$('#svCopy').addEventListener('click',svCopy);$('#svLoad').addEventListener('click',svLoad);
+$('#svShare').addEventListener('click',function(){var c=$('#svOut').value;if(navigator.share&&/^CC1-/.test(c))navigator.share({title:'Castaway Cove save code',text:c}).catch(function(){})});
+$('#svIn').addEventListener('input',function(){if(svPending){svPending=null;$('#svWarn').textContent='';$('#svLoad').textContent='Load code'}$('#svErr').textContent=''});
+svDlg.querySelector('[data-close]').addEventListener('click',closeSaveDlg);svDlg.addEventListener('click',function(e){if(e.target===this)closeSaveDlg()});
+
 /* ---------- loop ---------- */
 var acc=0,last=0,lastFood=-1,FT=[];window.__ft=FT;
 function tapStep(dt){if(!tapTo||S.state!=='play')return;var p=S.p;if(S.keys.up||S.keys.down||S.keys.left||S.keys.right||S.stick.x||S.stick.y){tapTo=null;return}
@@ -1343,7 +1457,13 @@ function loop(now){requestAnimationFrame(loop);var dt=Math.min(.1,(now-(last||no
   if(S.state==='play'||S.state==='dead'||S.state==='sail'){acc+=dt;var n=0;while(acc>=STEP&&n<8){tapStep(STEP);var sv=S.stick;if(S.tapS&&tapTo){S.stick={x:S.tapS.x,y:S.tapS.y}}step(STEP);if(S.tapS&&tapTo)S.stick=sv;acc-=STEP;n++}if(n>=8)acc=0}
   else{acc=0;if(S.state==='title')S.time+=dt;if(S.state==='voyage'||S.final)S.voyT=(S.voyT||0)+dt}
   var t0=performance.now();draw();FT.push(performance.now()-t0);if(FT.length>600)FT.shift();
-  var f=S.p?have('food'):0;if(f!==lastFood){lastFood=f;$('#bEatN').textContent=f}}
+  var f=S.p?have('food'):0;if(f!==lastFood){lastFood=f;$('#bEatN').textContent=f;bEatEl.classList.toggle('empty',f<=0)}
+  if(S.p){padCd(bDashEl,CDS.dash,S.p.dashCd,DASHCD);padCd(bEatEl,CDS.eat,S.p.eatCd,EATCD)}}
+/* cooldown sweep + countdown on the touch Dash and Eat buttons */
+var bDashEl=$('#bDash'),bEatEl=$('#bEat'),CDS={dash:{k:''},eat:{k:''}};
+function padCd(el,st,cd,max){var on=cd>0.001,k=on?cd.toFixed(1)+'|'+Math.round(cd/max*60):'';if(k===st.k)return;
+  if(!on&&st.k){el.classList.remove('ready');void el.offsetWidth;el.classList.add('ready')}st.k=k;
+  if(on)el.classList.remove('ready');el.classList.toggle('cooling',on);el.style.setProperty('--cd',on?(cd/max).toFixed(3):'0');el.querySelector('.cdt').textContent=on?cd.toFixed(1)+'s':''}
 
 /* ---------- start ---------- */
 HIST=[LEGACY[0]];genMap(0);newState();S.state='title';resize();setupHelp('cc');showTitle();requestAnimationFrame(loop);
@@ -1392,7 +1512,7 @@ window.castawayCove={state:function(){return S},newGame:newGame,continueGame:con
   mmData:function(){var c=document.createElement('canvas');c.width=MW*4;c.height=MH*4;var x=c.getContext('2d');x.imageSmoothingEnabled=false;var all=S.seen;S.seen=new Uint8Array(MW*MH).fill(1);mmReset();mmx.putImageData(mmImg,0,0);x.drawImage(mm,0,0,MW*4,MH*4);S.seen=all;mmReset();
     NODES0.forEach(function(n){x.fillStyle={palm:'#14532d',hard:'#052e16',rock:'#4b5563',iron:'#c2410c',silver:'#e2e8f0',obsidian:'#7c3aed',coral:'#f472b6',gold:'#facc15',crate:'#92400e',barrel:'#78350f',bush:'#e11d48',vine:'#65a30d',drift:'#a8a29e'}[n.type];x.fillRect(n.x/T*4-1.5,n.y/T*4-1.5,3,3)});
     SPAWNS.forEach(function(s){x.fillStyle='#fff';x.fillRect(s.x/T*4-2,s.y/T*4-2,4,4)});return c.toDataURL()},
-  autopilot:autopilot,computeObj:computeObj,landIsland:landIsland,hist:function(){return HIST.map(function(h,i){var c=cfgOf(i);return {n:c.n,b:c.b,boss:c.boss,mat:c.mat,W:c.W}})},gearNames:function(){return ['axe','pick','wep','arm','hat','bag'].map(function(k){return gearName(k,S.gear[k])})},fs:function(){return {el:!!fsEl(),can:fsCan(),app:isApp(),bodyApp:document.body.classList.contains('app')}},showTitle:showTitle,setDiff:setDiffSel,
+  autopilot:autopilot,computeObj:computeObj,landIsland:landIsland,saveCode:function(){return svEncode(svData())},decodeCode:function(c){return svDecode(c)},openSaveDlg:openSaveDlg,hist:function(){return HIST.map(function(h,i){var c=cfgOf(i);return {n:c.n,b:c.b,boss:c.boss,mat:c.mat,W:c.W}})},gearNames:function(){return ['axe','pick','wep','arm','hat','bag'].map(function(k){return gearName(k,S.gear[k])})},fs:function(){return {el:!!fsEl(),can:fsCan(),app:isApp(),bodyApp:document.body.classList.contains('app')}},showTitle:showTitle,setDiff:setDiffSel,
   legacyAt:function(k){store.del(SAVE);HIST=LEGACY.slice(0,k+1);genMap(k);newState({diff:DSEL});S.obj=computeObj();reveal(S.p.x,S.p.y,9);hideOv();save()},startAt:function(k,cv){store.del(SAVE);cv=cv||{diff:DSEL};cv.vseed=cv.vseed||newVseed();HIST=histUpTo(k,cv.vseed,[LEGACY[0]]);genMap(k);newState(cv||{diff:DSEL});S.obj=computeObj();reveal(S.p.x,S.p.y,9);hideOv();save()},dump:function(cx,cy,r){var o=[];for(var y=cy-r;y<=cy+r;y++){var l='';for(var x=cx-r;x<=cx+r;x++){var v=map.t[y*MW+x];l+=v===8?'G':v===7?'#':v===0?'~':String(map.z[y*MW+x])}o.push(l)}return o.join('\n')},islands:function(){return HIST.map(function(x){return x.name})},cfg:function(k){var c=cfgOf(k);return c&&{n:c.n,b:c.b,boss:c.boss,mat:c.mat,T:c.T,W:c.W,H:c.H,foes:c.foes,gates:c.gates}},regen:function(k,vs){HIST=histUpTo(k,vs,[LEGACY[0]]);genMap(k);return {att:MAPATT,ok:mapOk()}}};
 })();
 </script>
